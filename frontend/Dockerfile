@@ -9,13 +9,21 @@ COPY package.json .
 COPY package-lock.json .
 
 # Instalar las dependencias
-RUN npm install
+# Se añade --legacy-peer-deps para evitar posibles errores de dependencias conflictivas
+RUN npm install --legacy-peer-deps
 
 # Copiar el código fuente completo del frontend
 COPY . .
 
+# ----------------------------------------------------
+# 💡 FIX: Solucionar el error "Permission denied"
+# ----------------------------------------------------
+# Cambiar al usuario root temporalmente para asegurar que 'react-scripts' tenga permisos de ejecución.
+USER root 
+
 # Ejecutar el comando de construcción de React. Esto generará la carpeta 'build'
 RUN npm run build
+# ----------------------------------------------------
 
 # --- 2. Fase de Ejecución (Run Stage) ---
 # Usamos una imagen de Nginx muy ligera para servir los archivos estáticos.
