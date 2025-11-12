@@ -9,17 +9,20 @@ COPY package.json .
 COPY package-lock.json .
 
 # Instalar las dependencias
-# Se añade --legacy-peer-deps para evitar posibles errores de dependencias conflictivas
 RUN npm install --legacy-peer-deps
 
 # Copiar el código fuente completo del frontend
 COPY . .
 
 # ----------------------------------------------------
-# 💡 FIX: Solucionar el error "Permission denied"
+# 💡 FIX DEFINITIVO: Permisos de Ejecución
 # ----------------------------------------------------
-# Cambiar al usuario root temporalmente para asegurar que 'react-scripts' tenga permisos de ejecución.
+# 1. Aseguramos que estamos como usuario root (aunque esto ya lo intentamos, lo mantenemos).
 USER root 
+
+# 2. Hacemos que todos los archivos dentro de /app tengan permisos de ejecución.
+# Esto es crucial para que 'react-scripts' pueda correr.
+RUN chmod -R 777 /app
 
 # Ejecutar el comando de construcción de React. Esto generará la carpeta 'build'
 RUN npm run build
