@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Context>
+    <!-- Filtro CORS Nativo de Tomcat para asegurar la ejecución -->
+    <Valve className="org.apache.catalina.filters.CorsFilter"
+           allowedOrigins="http://localhost:3001,http://localhost:3000"
+           allowedRequestHeaders="Content-Type, X-Requested-With, Accept, Authorization"
+           allowedMethods="GET, POST, PUT, DELETE, OPTIONS, HEAD"
+           supportsCredentials="true"
+           allowPrivateNetwork="true" />
+</Context>

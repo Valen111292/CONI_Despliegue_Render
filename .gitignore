@@ -1,0 +1,27 @@
+Dependencias
+
+/node_modules
+/npm-debug.log*
+/yarn-error.log
+
+Logs de Firebase y Generales
+
+.log
+firebase-debug.log
+firebase-debug..log
+
+Archivos de Entorno Local/Temporales
+
+.DS_Store
+.env
+
+Directorios de compilación/salida (si aplica)
+
+/dist
+/build
+/out
+
+Archivos de Firebase (excluye configuraciones sensibles/temporales)
+
+.firebase/
+.runtimeconfig.json

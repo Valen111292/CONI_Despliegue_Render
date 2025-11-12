@@ -1,0 +1,1428 @@
+body {
+    background: #a9a7a8;
+    background: -webkit-linear-gradient(to right, hsla(0, 0%, 100%, 0.3), rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.3)), url("../img/ESLOGAN CONI.png");
+    background: linear-gradient(to right, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.3)), url("../img/ESLOGAN CONI.png");
+    background-size: 100% 100%;
+    background-position: center;
+    background-attachment: fixed;
+    position: relative;
+    background-repeat: no-repeat;
+    align-content: center;
+}
+
+.encabezado {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+}
+
+.encabezado li button {
+    font-size: 18px;
+    background: none;
+    color: aliceblue;
+    box-shadow: none;
+}
+
+.imagen-encabezado {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.barra-superior {
+    flex: 1;
+    background-color: rgb(230, 45, 45);
+    color: aliceblue;
+    padding: 10px;
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 5px;
+    height: 15px;
+}
+
+.barra-superior nav ul {
+    list-style: none;
+    display: flex;
+    gap: 15px;
+    margin: 0;
+    padding: 0;
+}
+
+.barra-superior nav a {
+    color: aliceblue;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.barra-superior nav a:hover {
+    text-decoration: underline;
+}
+
+.textoIndex {
+    font-size: 80px;
+    font-style: italic;
+    font-weight: bold;
+    width: 60%;
+    color: rgb(7, 7, 60);
+    padding-top: 50px;
+    padding-left: 70px;
+}
+
+input {
+    text-align: center;
+    font-size: 14px;
+    width: 250px;
+    height: 30px;
+    border-radius: 8px;
+    box-shadow: 0 0 5px 0 black;
+    margin: 5px;
+}
+
+input:focus {
+    outline: none;
+    border-color: #4a90e2;
+    background-color: #fff;
+}
+
+
+select {
+    font-size: 14px;
+    text-align: center;
+    width: 250px;
+    height: 30px;
+    border-radius: 8px;
+    box-shadow: 0 0 5px 0 black;
+}
+
+button {
+    width: 150px;
+    padding: 4px;
+    margin: 5px;
+    background-color: rgba(240, 248, 255, 0.311);
+    border: none;
+    border-radius: 8px;
+    color: rgb(255, 255, 255);
+    font-style: italic;
+    font-weight: bold;
+    box-shadow: 0 0 3px 0 black;
+    transition: background-color 1s;
+}
+
+button:hover {
+    background-color: rgb(230, 45, 45);
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+button a {
+    text-decoration: none;
+    color: aliceblue;
+}
+
+h4 {
+    color: rgb(7, 7, 60);
+    font-size: 25px;
+    margin-top: 12px;
+    margin-bottom: 5px;
+}
+
+h2 {
+    padding-top: 0;
+    text-align: center;
+    margin-top: 0;
+    font-size: 40px;
+    font-style: italic;
+    font-weight: bold;
+    width: 100%;
+}
+
+/* Estilo del login*/
+.login {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-direction: column;
+}
+
+.login>.inicio-sesion {
+    text-align: center;
+    padding: 10px;
+    border: 2px solid rgb(7, 7, 60);
+    border-radius: 20px;
+    box-shadow: 0 0 3px 0 black;
+    margin-top: 0;
+}
+
+.login h1 {
+    margin-top: 45px;
+    margin-bottom: 0;
+    color: rgb(7, 7, 60);
+    text-align: center;
+    font-size: 42px;
+    font-style: italic;
+    font-weight: bold;
+}
+
+.login h5:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+/*estilos perfil usuario*/
+
+.contenido {
+    margin: auto;
+    width: 95%;
+    padding-top: 50px;
+    margin-top: 40px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.contenido {
+    display: flex;
+    gap: 40px;
+    text-align: center;
+}
+
+.contenido>div {
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.388);
+    border-radius: 12px;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.3);
+    padding: 10px;
+    flex-basis: 280px;
+    /* Ancho base para cada tarjeta, permite que se ajusten */
+    flex-grow: 1;
+    /* Permite que crezcan para llenar el espacio */
+    max-width: 180px;
+    /* Ancho máximo para evitar que sean demasiado grandes */
+    margin-bottom: 20px;
+}
+
+.contenido img {
+    border-radius: 35%;
+    height: 150px;
+    width: 150px;
+    margin-bottom: 20px;
+}
+
+/* estilos perfil admin*/
+.contenidoPerfilAdmin {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding-top: 20px;
+}
+
+.gestion-administrador {
+    margin: auto;
+    width: 100%;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    /* Centra los hijos horizontalmente */
+    gap: 20px;
+    /* Espacio entre los hijos directos */
+    text-align: center;
+    flex-wrap: wrap;
+}
+
+.gestion-administrador>div {
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.388);
+    border-radius: 12px;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.3);
+    padding: 10px;
+    flex-basis: 280px;
+    flex-grow: 1;
+    max-width: 180px;
+    margin-bottom: 20px;
+}
+
+.gestion-administrador img {
+    border-radius: 35%;
+    height: 150px;
+    width: 150px;
+    margin-bottom: 20px;
+    object-fit: cover;
+    /* Asegura que la imagen se ajuste bien */
+}
+
+/* estilo gestionar usuarios nuevo y modificar */
+
+.gestionar-usuario {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+    padding-top: 20px;
+}
+
+.gestionar-usuario .botones-principales {
+    margin-top: 100px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.gestionar-usuario .botones-principales button {
+    width: 200px;
+    height: 50px;
+    margin: 50px;
+    background-color: rgba(240, 248, 255, 0.311);
+    border: none;
+    border-radius: 8px;
+    color: rgb(85, 83, 83);
+    font-style: italic;
+    font-weight: bold;
+    box-shadow: 0 0 3px 0 black;
+    transition: background-color 1s;
+}
+
+.gestionar-usuario .botones-principales button:hover {
+    background-color: rgb(230, 45, 45);
+    color: aliceblue;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+/* Estilos nuevos usuarios */
+
+.gestion-usuario-modulo {
+    padding: 20px;
+    min-height: 100vh;
+    /* Asegura que ocupe al menos toda la altura de la ventana */
+}
+
+.container.gestion-empleado {
+    background-color: rgba(255, 255, 255, 0.388);
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.3);
+    margin: 20px auto;
+    max-width: 600px;
+    /* Limita el ancho para mejor legibilidad del formulario */
+    text-align: center;
+    color: rgb(7, 7, 60);
+}
+
+.nuevo-empleado {
+    padding: 10px 0;
+}
+
+.nuevo-empleado h2 {
+    margin-bottom: 25px;
+    color: rgb(7, 7, 60);
+    font-size: 40px;
+    font-style: italic;
+    font-weight: bold;
+    text-align: center;
+}
+
+.nuevo-empleado form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.nuevo-empleado form label {
+    font-weight: bold;
+    color: rgb(7, 7, 60);
+    margin-bottom: -10px;
+    padding-left: 10px;
+    width: calc(100% - 20px);
+    /* Ajusta al ancho del input */
+    max-width: 300px;
+    /* Alinea con el max-width del input */
+    text-align: center;
+}
+
+.nuevo-empleado form input[type="text"],
+.nuevo-empleado form input[type="number"],
+.nuevo-empleado form input[type="email"],
+.nuevo-empleado form input[type="password"] {
+    width: calc(100% - 20px);
+    /* Ajusta el ancho para el padding */
+    max-width: 300px;
+    padding: 10px;
+    font-size: 16px;
+    margin: 0;
+    /* Elimina el margen global de input/select para controlar con gap */
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    /* Sombra interior suave */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.nuevo-empleado form select {
+    width: calc(100% - 20px);
+    /* Ajusta el ancho para el padding */
+    max-width: 320px;
+    height: 50px;
+    padding: 10px;
+    font-size: 16px;
+    margin: 0;
+    /* Elimina el margen global de input/select para controlar con gap */
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.nuevo-empleado form input:focus,
+.nuevo-empleado form select:focus {
+    outline: none;
+    border-color: rgb(230, 45, 45);
+    /* Borde rojo al enfocar */
+    box-shadow: 0 0 0 3px rgba(230, 45, 45, 0.2);
+    /* Sombra de enfoque suave */
+}
+
+.nuevo-empleado form button[type="submit"] {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 1.1em;
+    width: auto;
+    /* Permitir que el botón se ajuste a su contenido */
+    min-width: 200px;
+    background-color: rgba(240, 248, 255, 0.311);
+    border: none;
+    border-radius: 8px;
+    color: rgb(255, 255, 255);
+    font-style: italic;
+    font-weight: bold;
+    box-shadow: 0 0 3px 0 black;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.nuevo-empleado form button[type="submit"]:hover {
+    background-color: rgb(230, 45, 45);
+    cursor: pointer;
+    text-decoration: underline;
+    transform: translateY(-2px);
+    /* Pequeño efecto de elevación */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+}
+
+/* --- Estilos Modificar Usuario --- */
+
+.gestion-usuario-modificar-main {
+    padding: 20px;
+    min-height: calc(100vh - 180px);
+    /* Ajusta si es necesario para que el footer no se superponga */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.titulo.modificar-usuario {
+    margin-bottom: 25px;
+    color: rgb(7, 7, 60);
+    font-size: 40px;
+    font-style: italic;
+    font-weight: bold;
+    text-align: center;
+    width: 100%;
+}
+
+.search-and-modify-card {
+    background-color: rgba(255, 255, 255, 0.388);
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.3);
+    margin: 20px auto;
+    max-width: 600px;
+    text-align: center;
+    color: rgb(7, 7, 60);
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 25px;
+}
+
+.search-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(230, 45, 45, 0.3);
+    /* Separador sutil */
+    width: 100%;
+}
+
+.search-section .instrucciones {
+    font-weight: bold;
+    color: rgb(7, 7, 60);
+    font-size: 1.1em;
+    margin-bottom: 5px;
+    text-align: center;
+    max-width: 80%;
+}
+
+.search-section .input-cedula {
+    width: calc(100% - 20px);
+    max-width: 300px;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    text-align: center;
+}
+
+.search-section .input-cedula:focus {
+    outline: none;
+    border-color: rgb(230, 45, 45);
+    box-shadow: 0 0 0 3px rgba(230, 45, 45, 0.2);
+}
+
+.search-section button {
+    margin-top: 5px;
+    padding: 10px 20px;
+    font-size: 1.1em;
+    width: auto;
+    min-width: 150px;
+    background-color: rgba(240, 248, 255, 0.311);
+    border: none;
+    border-radius: 8px;
+    color: rgb(255, 255, 255);
+    font-style: italic;
+    font-weight: bold;
+    box-shadow: 0 0 3px 0 black;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.search-section button:hover {
+    background-color: rgb(230, 45, 45);
+    cursor: pointer;
+    text-decoration: underline;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+}
+
+.message-display {
+    margin-top: 15px;
+    margin-bottom: 25px;
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #dc3545;
+    /* Rojo para mensajes de error, puedes ajustar según el tipo de mensaje */
+}
+
+.modify-user-form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+}
+
+.modify-user-form-container label {
+    font-weight: bold;
+    color: rgb(7, 7, 60);
+    margin-bottom: -10px;
+    padding-left: 10px;
+    width: calc(100% - 20px);
+    max-width: 300px;
+    text-align: center;
+}
+
+/* Reutiliza los estilos de input y select globales de .nuevo-empleado form */
+.modify-user-form-container input[type="text"],
+.modify-user-form-container input[type="number"],
+.modify-user-form-container input[type="email"],
+.modify-user-form-container input[type="password"] {
+    width: calc(100% - 20px);
+    max-width: 300px;
+    padding: 10px;
+    font-size: 16px;
+    margin: 0;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    text-align: center;
+}
+
+.modify-user-form-container select {
+    width: calc(100% - 20px);
+    height: 50px;
+    max-width: 320px;
+    padding: 10px;
+    font-size: 16px;
+    margin: 0;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    text-align: center;
+}
+
+.modify-user-form-container input:focus,
+.modify-user-form-container select:focus {
+    outline: none;
+    border-color: rgb(230, 45, 45);
+    box-shadow: 0 0 0 3px rgba(230, 45, 45, 0.2);
+}
+
+.modify-user-form-container button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    font-size: 1.1em;
+    width: auto;
+    min-width: 150px;
+    background-color: rgba(240, 248, 255, 0.311);
+    border: none;
+    border-radius: 8px;
+    color: rgb(255, 255, 255);
+    font-style: italic;
+    font-weight: bold;
+    box-shadow: 0 0 3px 0 black;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.modify-user-form-container button:hover {
+    background-color: rgb(230, 45, 45);
+    cursor: pointer;
+    text-decoration: underline;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+}
+
+/*estilos gestionar equipos*/
+
+.tituloGestionEquipo {
+    margin-top: -2%;
+    text-align: center;
+    font-size: 35px;
+}
+
+.subtituloGestionEquipo {
+    text-align: left;
+    margin-left: 15px;
+    font-size: 25px;
+}
+
+.estado,
+.tipo,
+.clase {
+    text-align: center;
+    font-size: 14px;
+    width: 255px;
+    height: 35px;
+    border-radius: 8px;
+    box-shadow: 0 0 5px 0 black;
+    margin: 5px;
+}
+
+.estado,
+.clase,
+.tipo:focus {
+    outline: none;
+    border-color: #4a90e2;
+    background-color: #fff;
+}
+
+.agregarEquipo {
+    width: 90%;
+    margin: auto;
+    justify-content: center;
+}
+
+.filtrar {
+    margin-top: 15px;
+}
+
+.filtrar .filtrarEquipo {
+    font-size: 20px;
+    margin: 15px;
+}
+
+table {
+    margin: auto;
+    margin-bottom: 20px;
+    width: 95%;
+    border-collapse: collapse;
+    table-layout: auto;
+    background-color: rgba(255, 255, 255, 0.388);
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.3);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.acciones {
+    width: 90%;
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    align-items: center;
+}
+
+.editar,
+.eliminar {
+    padding: 4px 8px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+table th,
+table td {
+    border: 1px solid #ccc;
+    padding: 2px;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+table thead {
+    background-color: rgba(230, 45, 45, 0.9);
+    color: aliceblue;
+    font-weight: bold;
+}
+
+/*estilos para el modulo de compras*/
+
+.compras-modulo .container-textos {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 3px;
+    background-color: rgba(255, 255, 255, 0.388);
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.3);
+    border-radius: 12px;
+    width: 70%;
+    margin: auto;
+    margin-bottom: 20px;
+    font-size: 18px;
+    font-style: italic;
+    color: rgb(7, 7, 60);
+}
+
+.desplegable-compras {
+    width: 70%;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    color: rgb(7, 7, 60);
+    background-color: rgba(255, 255, 255, 0.388);
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.3);
+    border-radius: 12px;
+    overflow: hidden;
+    margin: auto;
+}
+
+.desplegable-compras select {
+    margin: 05px;
+}
+
+.desplegable-compras textarea {
+    width: 100%;
+    height: 75px;
+    padding: 5px;
+    border-radius: 8px;
+    box-shadow: 0 0 5px 0 black;
+    resize: none;
+    margin: auto;
+}
+
+.checkbox {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-style: italic;
+    font-weight: bold;
+    color: rgb(7, 7, 60);
+    justify-items: center;
+}
+
+.checkbox input {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+    width: 20px;
+    height: 20px;
+}
+
+/* Modulo de compras (solicitudes enviadas) */
+
+.listado-solicitudes {
+    width: 95%;
+    margin: 10px auto;
+    padding: 10px;
+    background-color: rgba(255, 255, 255, 0.388);
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.3);
+    border-radius: 12px;
+}
+
+.control-group {
+    display: inline-flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.control-group label {
+    margin-left: 15px;
+    margin-right: 20px;
+}
+
+table {
+    width: 95%;
+    border-collapse: collapse;
+    /* Elimina el espacio entre las celdas */
+    margin-top: 20px;
+    margin-bottom: 20px;
+    background-color: rgba(255, 255, 255, 0.388);
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.3);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+/* Estilos para el encabezado de la tabla */
+table thead {
+    background-color: rgb(230, 45, 45);
+    color: aliceblue;
+    font-weight: bold;
+}
+
+/* Estilos para las celdas del encabezado (<th>) y del cuerpo (<td>) */
+table th,
+table td,
+.description-column {
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    padding: 12px 5px;
+    text-align: center;
+    /* Centra el texto en todas las celdas */
+
+    /* Estas propiedades son importantes para manejar contenido largo en celdas y evitar desbordamientos */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+}
+
+/* Estilo para filas impares (fondo alternado para mejor legibilidad) */
+table tbody tr:nth-child(odd) {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Estilo para filas pares (fondo alternado) */
+table tbody tr:nth-child(even) {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Efecto hover para las filas del cuerpo de la tabla */
+table tbody tr:hover {
+    background-color: rgba(230, 45, 45, 0.2);
+    cursor: default;
+}
+
+/* Estilos para los botones de acción dentro de las tablas (si ya los tienes, esto los ajusta) */
+.btn-accion {
+    padding: 6px 12px;
+    margin: 2px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85em;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    color: white;
+}
+
+.btn-accion:hover {
+    transform: translateY(-1px);
+    /* Efecto ligero al pasar el ratón */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Colores específicos para los botones de acción */
+.btn-editar {
+    background-color: #007bff;
+}
+
+.btn-editar:hover {
+    background-color: #0056b3;
+}
+
+.btn-eliminar {
+    background-color: #dc3545;
+}
+
+.btn-eliminar:hover {
+    background-color: #c82333;
+}
+
+.btn-cambiar-estado {
+    background-color: #28a745;
+}
+
+.btn-cambiar-estado:hover {
+    background-color: #218838;
+}
+
+.btn-ver {
+    background-color: #17a2b8;
+}
+
+.btn-ver:hover {
+    background-color: #138496;
+}
+
+.btn-descargar {
+    background-color: #218838;
+    color: #333;
+}
+
+.btn-descargar:hover {
+    background-color: #218838;
+}
+
+/* Estilos para el botón principal de "Generar y Descargar Informe" */
+.btn-generar-excel {
+    display: block;
+    /* Ocupa su propia línea */
+    width: fit-content;
+    /* Se ajusta al contenido */
+    margin: 25px auto;
+    padding: 15px 30px;
+    background-color: rgb(230, 45, 45);
+    color: aliceblue;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.2em;
+    font-weight: bold;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.btn-generar-excel:hover {
+    background-color: #c82333;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+}
+
+/* Contenedor para el modal de informe histórico, si es necesario */
+.report-detail-table-container {
+    max-height: 60vh;
+    /* Altura máxima para la tabla dentro del modal */
+    overflow-y: auto;
+    /* Scroll para la tabla si es muy larga */
+    margin-bottom: 20px;
+}
+
+/* Estilos para Actas */
+
+.acta-form-modulo {
+    padding: 20px;
+    min-height: 100vh;
+}
+
+.acta-main {
+    background-color: rgba(255, 255, 255, 0.388);
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.3);
+    margin: 20px auto;
+    max-width: 900px;
+    /* Limitar el ancho para mejor lectura */
+    text-align: center;
+    color: rgb(7, 7, 60);
+}
+
+.acta-main h2 {
+    margin-bottom: 25px;
+    color: rgb(7, 7, 60);
+
+}
+
+.form-registro-acta input[type="text"] {
+    width: calc(100% - 20px);
+    max-width: 300px;
+    margin-bottom: 15px;
+}
+
+.form-registro-acta button[type="submit"] {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 1.1em;
+    width: auto;
+    /* Permitir que el botón se ajuste a su contenido */
+    min-width: 200px;
+}
+
+.section-title {
+    margin-top: 30px;
+    margin-bottom: 15px;
+    font-size: 25px;
+    color: rgb(7, 7, 60);
+    text-align: center;
+    font-style: italic;
+    font-weight: bold;
+}
+
+.search-input {
+    width: calc(100% - 20px);
+    max-width: 400px;
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+
+}
+
+.equipos-selection-container {
+    border: 1px solid rgba(230, 45, 45, 0.5);
+    border-radius: 10px;
+    padding: 15px;
+    margin-top: 20px;
+    background-color: rgba(255, 255, 255, 0.2);
+    max-height: 400px;
+    /* Altura máxima para el contenedor de selección */
+    overflow-y: auto;
+    /* Permite desplazamiento vertical si hay muchos equipos */
+}
+
+.equipment-category {
+    margin-bottom: 20px;
+    border-bottom: 1px dashed rgba(7, 7, 60, 0.3);
+    padding-bottom: 15px;
+}
+
+.equipment-category:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.equipment-category h3 {
+    color: rgb(230, 45, 45);
+    font-size: 22px;
+    margin-top: 0;
+    margin-bottom: 15px;
+    text-align: left;
+    padding-left: 10px;
+}
+
+.equipment-list {
+    display: flex;
+    flex-wrap: wrap;
+    /* Permite que los elementos se envuelvan */
+    gap: 10px;
+    justify-content: center;
+}
+
+.equipment-item {
+    background-color: rgba(255, 255, 255, 0.5);
+    border: 1px solid rgba(7, 7, 60, 0.2);
+    border-radius: 8px;
+    padding: 10px 15px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    flex: 1 1 calc(50% - 20px);
+    /* Dos columnas en pantallas más grandes, ajusta el 50% y el gap */
+    max-width: calc(50% - 20px);
+    /* Para asegurar dos columnas */
+    min-width: 280px;
+    /* Ancho mínimo para evitar que se pongan demasiado pequeños */
+    text-align: left;
+    transition: background-color 0.3s ease;
+}
+
+.equipment-item:hover {
+    background-color: rgba(230, 45, 45, 0.1);
+}
+
+.equipment-item label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 1em;
+    color: rgb(7, 7, 60);
+}
+
+.equipment-item input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    flex-shrink: 0;
+    /* Evita que el checkbox se encoja */
+    box-shadow: none;
+}
+
+.equipment-details {
+    flex-grow: 1;
+    /* Permite que los detalles ocupen el espacio restante */
+    white-space: normal;
+    /* Asegura que el texto se envuelva */
+    word-wrap: break-word;
+    /* Rompe palabras largas si es necesario */
+}
+
+.detail-label {
+    font-weight: bold;
+    color: rgb(230, 45, 45);
+    margin-right: 5px;
+}
+
+.no-results-message {
+    color: rgb(230, 45, 45);
+    font-style: italic;
+    margin-top: 20px;
+    font-size: 1.1em;
+}
+
+.divider {
+    border: none;
+    border-top: 2px solid rgb(230, 45, 45);
+    /* Línea divisoria */
+    margin: 40px 0;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.consultar-actas-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    /* Para responsividad */
+}
+
+.consultar-actas-section input {
+    width: calc(100% - 20px);
+    max-width: 250px;
+}
+
+.consultar-actas-section button {
+    width: auto;
+    min-width: 120px;
+}
+
+.actas-consultadas-table-container {
+    margin-top: 20px;
+}
+
+/* Media Queries para Responsividad modificar usuario */
+@media (max-width: 768px) {
+    .search-and-modify-card {
+        padding: 20px;
+        width: 95%;
+    }
+
+    .search-section input,
+    .search-section button,
+    .modify-user-form-container label,
+    .modify-user-form-container input,
+    .modify-user-form-container select,
+    .modify-user-form-container button {
+        width: 100%;
+        max-width: none;
+    }
+}
+
+/* Media Queries para Responsividad nuevo usuario */
+@media (max-width: 768px) {
+    .container.gestion-empleado {
+        padding: 20px;
+        width: 95%;
+    }
+
+    .nuevo-empleado form label,
+    .nuevo-empleado form input,
+    .nuevo-empleado form select {
+        width: 100%;
+        /* Ocupa todo el ancho en móvil */
+        max-width: none;
+        /* Elimina el límite de ancho máximo */
+    }
+}
+
+/* Media Queries para responsividad actas */
+@media (max-width: 768px) {
+    .acta-main {
+        padding: 20px;
+        width: 95%;
+    }
+
+    .form-registro-acta input[type="text"],
+    .search-input {
+        width: 100%;
+        max-width: none;
+    }
+
+    .equipment-item {
+        flex: 1 1 100%;
+        /* Una columna en pantallas pequeñas */
+        max-width: 100%;
+    }
+
+    .consultar-actas-section {
+        flex-direction: column;
+    }
+
+    .consultar-actas-section input,
+    .consultar-actas-section button {
+        width: 100%;
+        max-width: none;
+    }
+}
+
+/* Media Queries para Responsividad tablas */
+@media (max-width: 768px) {
+
+    table,
+    thead,
+    tbody,
+    th,
+    td,
+    tr {
+        display: block;
+    }
+
+    thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+
+    tr {
+        border: 1px solid #ccc;
+        margin-bottom: 15px;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    td {
+        border: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        position: relative;
+        padding-left: 50%;
+        text-align: right;
+        font-size: 0.9em;
+        /* Fuente ligeramente más pequeña */
+    }
+
+    td:before {
+        position: absolute;
+        top: 6px;
+        left: 6px;
+        width: 45%;
+        padding-right: 10px;
+        white-space: nowrap;
+        text-align: left;
+        font-weight: bold;
+        color: rgb(7, 7, 60);
+    }
+
+    /* responsive para labels de tablas */
+
+    td:nth-of-type(1):before {
+        content: "ID Inventario:";
+    }
+
+    td:nth-of-type(2):before {
+        content: "Categoría:";
+    }
+
+    td:nth-of-type(3):before {
+        content: "Tipo:";
+    }
+
+    td:nth-of-type(4):before {
+        content: "Marca:";
+    }
+
+    td:nth-of-type(5):before {
+        content: "Serial:";
+    }
+
+    td:nth-of-type(6):before {
+        content: "RAM:";
+    }
+
+    td:nth-of-type(7):before {
+        content: "Disco:";
+    }
+
+    td:nth-of-type(8):before {
+        content: "Procesador:";
+    }
+
+    td:nth-of-type(9):before {
+        content: "Estado Asignación:";
+    }
+
+    td:nth-of-type(10):before {
+        content: "Asignado A:";
+    }
+
+    td:nth-of-type(11):before {
+        content: "Fecha Asignación:";
+    }
+
+    td:nth-of-type(12):before {
+        content: "Acciones:";
+    }
+
+    /* Para las tablas de Informes Históricos */
+    .informes-historicos table td:nth-of-type(1):before {
+        content: "ID Informe:";
+    }
+
+    .informes-historicos table td:nth-of-type(2):before {
+        content: "Fecha Generación:";
+    }
+
+    .informes-historicos table td:nth-of-type(3):before {
+        content: "Generado Por:";
+    }
+
+    .informes-historicos table td:nth-of-type(4):before {
+        content: "Filtro Aplicado:";
+    }
+
+    .informes-historicos table td:nth-of-type(5):before {
+        content: "Acciones:";
+    }
+}
+
+/* Media Queries para Responsividad modificar usuario */
+@media (max-width: 768px) {
+    .search-and-modify-card {
+        padding: 20px;
+        width: 95%;
+    }
+
+    .search-section .instrucciones {
+        max-width: 100%;
+    }
+
+    .search-section input,
+    .search-section button,
+    .modify-user-form-container label,
+    .modify-user-form-container input,
+    .modify-user-form-container select,
+    .modify-user-form-container button {
+        width: 100%;
+        max-width: none;
+    }
+}
+
+/* --- Media Query para Responsividad perfilAdmin */
+@media (max-width: 768px) {
+    .contenidoPerfilAdmin {
+        flex-direction: column;
+        gap: 20px;
+        padding-top: 20px;
+    }
+
+    .contenidoPerfilAdmin>div {
+        width: 90%;
+        max-width: none;
+        margin: 0 auto 20px auto;
+    }
+}
+
+/* Media Queries para Responsividad perfilUsuario*/
+
+/* En pantallas medianas (tablets y algunos laptops pequeños) */
+@media (max-width: 1024px) {
+    .contenido {
+        gap: 30px;
+    }
+
+    .gestion-equi-perif,
+    .gestion-compras,
+    .gestion-actas,
+    .gestion-empleados,
+    .informe {
+        flex-basis: calc(50% - 30px); /* Dos columnas con espacio */
+        max-width: calc(50% - 30px);
+    }
+}
+
+/* En pantallas pequeñas */
+@media (max-width: 768px) {
+    .titulo.perfil-usuario {
+        font-size: 30px;
+        margin-top: 20px;
+        margin-bottom: 30px;
+    }
+
+    .contenido {
+        flex-direction: column;
+        align-items: center;
+        gap: 25px;
+        padding: 15px;
+    }
+
+    .gestion-equi-perif,
+    .gestion-compras,
+    .gestion-actas,
+    .gestion-empleados,
+    .informe {
+        width: 90%;
+        max-width: none;
+        padding: 15px;
+    }
+
+    .contenido img {
+        width: 120px;
+        height: 120px;
+        margin-bottom: 15px;
+    }
+
+    .contenido button {
+        padding: 10px 15px;
+        font-size: 1em;
+    }
+}
+
+/* Estilos para el botón de cerrar sesión en el encabezado */
+.cerrarSesion {
+    font-size: 18px;
+    background: none;
+    color: aliceblue;
+    box-shadow: none;
+    border: none; /* Asegura que no tenga borde */
+    cursor: pointer;
+    padding: 5px 10px;
+    transition: text-decoration 0.3s ease;
+}
+
+.cerrarSesion:hover {
+    text-decoration: underline;
+}

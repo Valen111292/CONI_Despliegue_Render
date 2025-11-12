@@ -1,0 +1,68 @@
+version: "3.9"
+
+services:
+  # 1. SERVICIO DE BASE DE DATOS (MySQL)
+  database:
+    image: mysql:8.0
+    container_name: coni_db # Nombre del contenedor
+    restart: always
+    environment:
+      # Base de Datos y usuario principal (root)
+      MYSQL_DATABASE: coni 
+      MYSQL_ROOT_PASSWORD: root_pass # Contraseña de superusuario (root)
+      # Nota: Se eliminaron MYSQL_USER y MYSQL_PASSWORD para root, ¡que causaban el error!
+    ports:
+      - "3306:3306" 
+    volumes:
+      # Monta el script SQL para inicializar las tablas (Busca el archivo en ./init/init.sql)
+      - ./init:/docker-entrypoint-initdb.d
+      # Persistencia de la data
+      - db_data:/var/lib/mysql
+
+  # 2. SERVICIO BACKEND (Java/Tomcat)
+  backend:
+    build:
+      context: ./backend 
+      dockerfile: Dockerfile
+    container_name: coni_backend
+    restart: always
+    ports:
+      - "8080:8080" 
+    environment:
+      # Variables de entorno que tu código Java DEBE USAR
+      DB_HOST: database 
+      DB_NAME: coni # Nombre de la DB, debe coincidir
+      DB_USER: root # Usaremos root para simplificar la conexión
+      DB_PASSWORD: root_pass
+    depends_on:
+      - database 
+
+  # 3. SERVICIO FRONTEND (React/Nginx)
+  frontend:
+    build:
+      context: ./frontend 
+      dockerfile: Dockerfile
+    container_name: coni_frontend
+    restart: always
+    ports:
+      - "3001:80"
+    depends_on:
+      - backend 
+
+  # 4. SERVICIO OPCIONAL (PhpMyAdmin)
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: coni_phpmyadmin
+    restart: always
+    ports:
+      - "8081:80" 
+    environment:
+      PMA_HOST: database # Se conecta al servicio 'database'
+      PMA_USER: root
+      PMA_PASSWORD: root_pass
+    depends_on:
+      - database
+
+# Volúmenes para persistir la data de MySQL
+volumes:
+  db_data:

@@ -1,0 +1,39 @@
+# Node.js
+/frontend/node_modules
+/frontend/.env
+
+# NetBeans / Java
+/backend/nbproject/private/
+backend/build/
+backend/dist/
+backend/web/WEB-INF/lib/
+backend/src/java/test/
+
+# General
+.DS_Store
+Thumbs.db
+*.log
+*.class
+*.jar
+*.war
+*.iml
+.idea/
+.vscode/
+
+# Ignorar carpeta de compilación de NetBeans
+/backend/build/
+/backend/dist/
+/backend/nbproject/private/
+
+/frontend/node_modules/
+/frontend/.env
+
+# Archivos y carpetas comunes a ignorar
+*.class
+*.jar
+*.war
+*.log
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
