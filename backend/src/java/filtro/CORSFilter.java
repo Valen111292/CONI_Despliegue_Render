@@ -17,7 +17,7 @@ public class CORSFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) res;
 
         // Origen permitido, cámbialo si tienes otro frontend
-        String allowedOrigin = "http://localhost:3001"; // ¡Usar HTTPS y la URL desplegada!
+        String allowedOrigin = "https://coni-frontend.onrender.com"; // ¡Usar HTTPS y la URL desplegada!
 
         // Añadir headers CORS comunes a TODAS las respuestas
         response.setHeader("Access-Control-Allow-Origin", allowedOrigin);
