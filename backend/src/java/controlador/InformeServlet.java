@@ -19,7 +19,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import Conexion.Conexion; // Asegúrate de que esta clase de conexión sea correcta
 
-@WebServlet("/api/informes/*") // Usamos /* para manejar sub-rutas como /inventario, /guardar, /historico
+@WebServlet("/informes/") // Usamos /* para manejar sub-rutas como /inventario, /guardar, /historico
 public class InformeServlet extends HttpServlet {
 
     // Método auxiliar para obtener el ID de usuario de la sesión

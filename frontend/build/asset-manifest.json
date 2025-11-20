@@ -1,0 +1,29 @@
+{
+  "files": {
+    "main.css": "/static/css/main.47200a65.css",
+    "main.js": "/static/js/main.751a4f22.js",
+    "static/js/239.e1e53ca8.chunk.js": "/static/js/239.e1e53ca8.chunk.js",
+    "static/js/977.4b61191f.chunk.js": "/static/js/977.4b61191f.chunk.js",
+    "static/js/455.5b3099ab.chunk.js": "/static/js/455.5b3099ab.chunk.js",
+    "static/js/453.a692d9ed.chunk.js": "/static/js/453.a692d9ed.chunk.js",
+    "static/media/empleados.gif": "/static/media/empleados.25fd176f477f828eeaf3.gif",
+    "static/media/acta.gif": "/static/media/acta.458a12f01a829e83c677.gif",
+    "static/media/compras.gif": "/static/media/compras.9fda1857815557314067.gif",
+    "static/media/gestionar usuario.gif": "/static/media/gestionar usuario.c425a61ef0966f7c2ac0.gif",
+    "static/media/ESLOGAN CONI.png": "/static/media/ESLOGAN CONI.8c9670ad024a45958f08.png",
+    "static/media/generar informe.gif": "/static/media/generar informe.20ac1fa2f83f6feea0d9.gif",
+    "static/media/computadora.gif": "/static/media/computadora.ef372834e2a4ce3eef91.gif",
+    "static/media/logo aldir.png": "/static/media/logo aldir.035af70a92d7613455dc.png",
+    "index.html": "/index.html",
+    "main.47200a65.css.map": "/static/css/main.47200a65.css.map",
+    "main.751a4f22.js.map": "/static/js/main.751a4f22.js.map",
+    "239.e1e53ca8.chunk.js.map": "/static/js/239.e1e53ca8.chunk.js.map",
+    "977.4b61191f.chunk.js.map": "/static/js/977.4b61191f.chunk.js.map",
+    "455.5b3099ab.chunk.js.map": "/static/js/455.5b3099ab.chunk.js.map",
+    "453.a692d9ed.chunk.js.map": "/static/js/453.a692d9ed.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.47200a65.css",
+    "static/js/main.751a4f22.js"
+  ]
+}

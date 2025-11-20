@@ -15,7 +15,7 @@ import jakarta.servlet.http.HttpSession;
 import org.json.JSONObject;
 import Conexion.Conexion;
 
-@WebServlet("/api/solicitudes-compra")
+@WebServlet("/solicitudes-compra")
 public class SolicitudCompraServlet extends HttpServlet {
 
     private int getRequestId(HttpServletRequest request) {
@@ -347,5 +347,5 @@ public class SolicitudCompraServlet extends HttpServlet {
             out.flush();
         }
     }
-    
+          
 }

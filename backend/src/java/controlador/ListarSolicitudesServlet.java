@@ -16,7 +16,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import Conexion.Conexion;
 
-@WebServlet("/api/solicitudes")
+@WebServlet("/listar-solicitudes-compra")
 public class ListarSolicitudesServlet extends HttpServlet {
 
     @Override
@@ -78,53 +78,60 @@ public class ListarSolicitudesServlet extends HttpServlet {
                 sqlBuilder.append(" AND (descripcion LIKE ? OR tipo_solicitud LIKE ?)");
             }
 
-            // Ordenamiento
-            if (sortBy != null && !sortBy.trim().isEmpty()) {
-                sqlBuilder.append(" ORDER BY "); // Añadido espacio aquí
-                switch (sortBy.toLowerCase()) {
-                    case "fecha":
-                        sqlBuilder.append("fecha_solicitud");
-                        break;
-                    case "estado":
-                        sqlBuilder.append("estado");
-                        break;
-                    case "prioridad":
-                        sqlBuilder.append("alta_prioridad");
-                        break;
-                    case "tipo":
-                        sqlBuilder.append("tipo_solicitud");
-                        break;
-                    default:
-                        sqlBuilder.append("fecha_solicitud"); // Orden por defecto si sortBy es inválido
-                }
-                if (order != null && order.equalsIgnoreCase("desc")) {
-                    sqlBuilder.append(" DESC"); // Añadido espacio aquí
-                } else {
-                    sqlBuilder.append(" ASC"); // Por defecto ascendente
-                }
+            // --- Normalizar sortBy ---
+            if (sortBy == null || sortBy.trim().isEmpty()) {
+                sortBy = "fecha"; // el frontend lo llama así, nosotros lo traducimos
             } else {
-                sqlBuilder.append(" ORDER BY fecha_solicitud DESC"); // Orden por defecto si no se especifica, añadido espacio
+                sortBy = sortBy.trim().toLowerCase();
             }
+
+// --- Traducir sortBy a nombres válidos de columnas ---
+            String columnaOrden;
+            switch (sortBy) {
+                case "fecha":
+                    columnaOrden = "fecha_solicitud";
+                    break;
+                case "estado":
+                    columnaOrden = "estado";
+                    break;
+                case "prioridad":
+                    columnaOrden = "alta_prioridad";
+                    break;
+                case "tipo":
+                    columnaOrden = "tipo_solicitud";
+                    break;
+                default:
+                    columnaOrden = "fecha_solicitud"; // fallback seguro
+            }
+
+// --- Normalizar order ---
+            String ordenFinal = "ASC";
+            if ("desc".equalsIgnoreCase(order)) {
+                ordenFinal = "DESC";
+            }
+
+// --- Agregar ORDER BY ---
+            sqlBuilder.append(" ORDER BY ").append(columnaOrden).append(" ").append(ordenFinal);
 
             String sql = sqlBuilder.toString();
             stmt = conn.prepareStatement(sql);
-            
+
             int paramIndex = 1;
             // Lógica corregida para establecer el parámetro id_usuario
             // Solo se establece el parámetro si el rol NO es "usuario" Y el cargo NO es "Otro"
             if (!("usuario".equalsIgnoreCase(rolAutenticacion) && "Otro".equalsIgnoreCase(cargoEmpleado))) {
                 stmt.setInt(paramIndex++, idUsuario);
             }
-            
+
             if (filterPriority != null && !filterPriority.equalsIgnoreCase("all")) {
                 stmt.setBoolean(paramIndex++, Boolean.parseBoolean(filterPriority));
             }
-            
-            if (searchQuery != null && !searchQuery.trim().isEmpty()){
+
+            if (searchQuery != null && !searchQuery.trim().isEmpty()) {
                 stmt.setString(paramIndex++, "%" + searchQuery + "%");
                 stmt.setString(paramIndex++, "%" + searchQuery + "%");
             }
-            
+
             rs = stmt.executeQuery();
 
             while (rs.next()) {

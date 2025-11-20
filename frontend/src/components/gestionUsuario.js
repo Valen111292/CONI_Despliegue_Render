@@ -15,7 +15,7 @@ const GestionarUsuario = () => {
 
     const handleLogout = async () => {
         try {
-            const response = await fetch("http://localhost:8080/CONI1.0/LogoutServlet", {
+            const response = await fetch("http://localhost:8080/LogoutServlet", {
                 method: "GET",
                 credentials: "include"
             });

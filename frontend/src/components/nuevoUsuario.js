@@ -38,7 +38,7 @@ const NuevoUsuario = () => {
 
   const handleLogout = async () => {
     try {
-      const response = await fetch("http://localhost:8080/CONI/LogoutServlet", {
+      const response = await fetch("http://localhost:8080/LogoutServlet", {
         method: "GET",
         credentials: "include"
       });
@@ -75,7 +75,7 @@ const NuevoUsuario = () => {
     console.log("Datos a enviar para crear usuario:", usuarioData);
 
     try {
-      const response = await fetch("http://localhost:8080/CONI/CrearUsuarioServlet", {
+      const response = await fetch("http://localhost:8080/CrearUsuarioServlet", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

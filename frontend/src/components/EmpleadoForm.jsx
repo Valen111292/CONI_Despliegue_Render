@@ -53,7 +53,7 @@ const EmpleadoForm = () => {
 
     const fetchEmpleados = async () => {
         try {
-            const response = await fetch("http://localhost:8080/CONI/EmpleadoServlet", {
+            const response = await fetch("http://localhost:8080/EmpleadoServlet", {
                 method: "GET",
                 credentials: "include"
             });
@@ -94,7 +94,7 @@ const EmpleadoForm = () => {
 
     const handleLogout = async () => {
         try {
-            const response = await fetch("http://localhost:8080/CONI/LogoutServlet", {
+            const response = await fetch("http://localhost:8080/LogoutServlet", {
                 method: "GET",
                 credentials: "include"
             });
@@ -134,7 +134,7 @@ const EmpleadoForm = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const url = "http://localhost:8080/CONI/EmpleadoServlet";
+        const url = "http://localhost:8080/EmpleadoServlet";
         const method = (vista === "editar") ? "PUT" : "POST";
 
         try {
@@ -171,7 +171,7 @@ const EmpleadoForm = () => {
             return;
         }
         try {
-            const response = await fetch(`http://localhost:8080/CONI/EmpleadoServlet?cedula=${empleado.cedula}`, {
+            const response = await fetch(`http://localhost:8080/EmpleadoServlet?cedula=${empleado.cedula}`, {
                 method: "DELETE",
                 credentials: "include"
             });
@@ -205,7 +205,7 @@ const EmpleadoForm = () => {
                 <img src={logo} className="imagen-encabezado" alt="Logo CONI" />
                 <div className="barra-superior">
                     <nav>
-                        <li><button onClick={handleLogout}>Cerrar sesión</button></li>
+                      <li><button onClick={handleLogout}>Cerrar sesión</button></li>
                     </nav>
                 </div>
             </div>
@@ -313,9 +313,7 @@ const EmpleadoForm = () => {
                             onChange={handleChange}
                             required
                         >
-                            { cargoNulo.map((cargo, index) => (
-                                <option value=""> --- Seleccione un Cargo --- </option>
-                            ))}
+                            <option value="" disabled>--- Seleccione un Cargo ---</option>
                             {cargosDisponibles.map((cargo, index) => (
                                 <option key={index} value={cargo}>{cargo}</option>
                             ))}

@@ -1,14 +1,14 @@
-# Usar una imagen base de Tomcat
-FROM tomcat:9.0-jdk17-temurin
+# Imagen base: Tomcat + JDK 17
+FROM tomcat:10.1-jdk17-temurin
 
-# Eliminar la aplicación de ejemplo predeterminada
+# Eliminar apps por defecto de Tomcat
 RUN rm -rf /usr/local/tomcat/webapps/*
 
-# Copiar el archivo .war al contexto /CONI
-COPY dist/CONI.war /usr/local/tomcat/webapps/CONI.war
+# Copiar el WAR generado por NetBeans (asegúrate de hacer Clean and Build antes)
+COPY dist/CONI.war /usr/local/tomcat/webapps/ROOT.war
 
-# Exponer el puerto de Tomcat
+# Exponer puerto 8080
 EXPOSE 8080
 
-# Comando para iniciar Tomcat
+# Iniciar Tomcat
 CMD ["catalina.sh", "run"]
