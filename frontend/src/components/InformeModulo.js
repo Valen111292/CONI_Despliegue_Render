@@ -44,7 +44,7 @@ const InformeModulo = () => {
                 // Usamos las propiedades del objeto JSON para verificar la sesión
                 const id = usuario.idUsuario || usuario.id;
                 const rol = usuario.rolAutenticacion;
-                const cargo = usuario.cargoEmpleado;
+                const cargo = usuario.cargoEmpleado || localStorage.getItem("cargoEmpleado");
 
                 if (id && rol && cargo) {
                     setCurrentUser({ id, rol, cargo });
@@ -348,7 +348,7 @@ const InformeModulo = () => {
                                     {historicalReports.map(reporte => (
                                         <li key={reporte.id}>
                                             <p><strong>ID:</strong> {reporte.id}</p>
-                                            <p><strong>Fecha Guardado:</strong> {new Date(reporte.fechaGuardado).toLocaleString()}</p>
+                                            <p><strong>Fecha Guardado:</strong> {new Date(reporte.fechaGeneracion).toLocaleString()}</p>
                                             <p><strong>Estado de Filtro:</strong> {reporte.estadoFiltro}</p>
                                             <div className="acciones-historico">
                                                 <button onClick={() => handleViewHistorical(reporte.id)}>Ver Reporte</button>
