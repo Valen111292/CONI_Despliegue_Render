@@ -1,9 +1,15 @@
 # Etapa 1: construir la app
 FROM node:18-alpine AS build
 WORKDIR /app
+
 COPY package*.json ./
 RUN npm install
+
 COPY . .
+
+# 🔥 Fix permisos para react-scripts (Windows → Linux issue)
+RUN chmod +x node_modules/.bin/react-scripts
+
 RUN npm run build
 
 # Etapa 2: servir con nginx
