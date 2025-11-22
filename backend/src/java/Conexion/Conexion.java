@@ -7,7 +7,8 @@ import java.sql.SQLException;
 public class Conexion {
 
     // URL y credenciales de la base de datos en Render
-    private static final String URL = "jdbc:postgresql://dpg-d49umn9e2q1c73dsdrug-a.oregon-postgres.render.com:5432/coni";
+    private static final String URL = "jdbc:postgresql://dpg-d49umn9e2q1c73dsdrug-a/coni";
+
     private static final String USER = "coni_user";
     private static final String PASSWORD = "LeCaaRPYQG9G57Gsfdl3VSmeWG9GCr98";
 
