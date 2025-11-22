@@ -38,7 +38,7 @@ const NuevoUsuario = () => {
 
   const handleLogout = async () => {
     try {
-      const response = await fetch("http://coni-backend.onrender.com/LogoutServlet", {
+      const response = await fetch("https://coni-backend.onrender.com/LogoutServlet", {
         method: "GET",
         credentials: "include"
       });
@@ -75,7 +75,7 @@ const NuevoUsuario = () => {
     console.log("Datos a enviar para crear usuario:", usuarioData);
 
     try {
-      const response = await fetch("http://coni-backend.onrender.com/CrearUsuarioServlet", {
+      const response = await fetch("https://coni-backend.onrender.com/CrearUsuarioServlet", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

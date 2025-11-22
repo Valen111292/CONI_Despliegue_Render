@@ -27,7 +27,7 @@ function Equipo() {
 
   const fetchEquipos = useCallback(async () => {
     try {
-      let url = "http://coni-backend.onrender.com/EquipoServlet?accion=listar";
+      let url = "https://coni-backend.onrender.com/EquipoServlet?accion=listar";
       if (filtro) url += `&estado=${encodeURIComponent(filtro.toUpperCase())}`;
 
       const response = await fetch(url);
@@ -53,7 +53,7 @@ function Equipo() {
 
   const handleLogout = async () => {
     try {
-      const response = await fetch("http://coni-backend.onrender.com/LogoutServlet", {
+      const response = await fetch("https://coni-backend.onrender.com/LogoutServlet", {
         method: "GET",
         credentials: "include"
       });
@@ -73,7 +73,7 @@ function Equipo() {
   };
 
   const verificarSerieUnica = async (serie) => {
-    const res = await fetch(`http://coni-backend.onrender.com/EquipoServlet?verificarSerie=${serie}`);
+    const res = await fetch(`https://coni-backend.onrender.com/EquipoServlet?verificarSerie=${serie}`);
     const data = await res.json();
     return !data.existe;
   };
@@ -112,7 +112,7 @@ function Equipo() {
     };
 
     try {
-      const res = await fetch('http://coni-backend.onrender.com/EquipoServlet', {
+      const res = await fetch('https://coni-backend.onrender.com/EquipoServlet', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
@@ -149,7 +149,7 @@ function Equipo() {
     const equipoActualizado = { ...equipoEditando };
 
     try {
-      const res = await fetch('http://coni-backend.onrender.com/EquipoServlet', {
+      const res = await fetch('https://coni-backend.onrender.com/EquipoServlet', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(equipoActualizado),
@@ -177,7 +177,7 @@ function Equipo() {
     const confirmar = window.confirm('¿Seguro que deseas eliminar este equipo?');
     if (!confirmar) return;
 
-    const res = await fetch(`http://coni-backend.onrender.com/EquipoServlet?n_inventario=${n_inventario}`, {
+    const res = await fetch(`https://coni-backend.onrender.com/EquipoServlet?n_inventario=${n_inventario}`, {
       method: 'DELETE',
     });
 

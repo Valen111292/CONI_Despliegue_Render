@@ -25,7 +25,7 @@ function ActaForm() {
     // Función para cargar los equipos disponibles (usamos useCallback para optimización)
     const fetchEquiposDisponibles = useCallback(async () => {
         try {
-            const response = await fetch('http://coni-backend.onrender.com/EquipoServlet?accion=listar&estado=disponible');
+            const response = await fetch('https://coni-backend.onrender.com/EquipoServlet?accion=listar&estado=disponible');
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
@@ -59,7 +59,7 @@ function ActaForm() {
 
     const handleLogout = async () => {
         try {
-            const response = await fetch("http://coni-backend.onrender.com/LogoutServlet", {
+            const response = await fetch("https://coni-backend.onrender.com/LogoutServlet", {
                 method: "GET",
                 credentials: "include"
             });
@@ -109,7 +109,7 @@ function ActaForm() {
             n_inventario: seleccionados
         };
 
-        fetch('http://coni-backend.onrender.com/ActasServlet', {
+        fetch('https://coni-backend.onrender.com/ActasServlet', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(datos)
@@ -187,14 +187,14 @@ function ActaForm() {
     console.log("Datos que se envían:", JSON.stringify(formulario));
 
     const consultarActas = () => {
-        fetch(`http://coni-backend.onrender.com/ActasServlet?cedula=${consulta}`)
+        fetch(`https://coni-backend.onrender.com/ActasServlet?cedula=${consulta}`)
             .then(res => res.json())
             .then(data => setActasConsultadas(data))
             .catch(err => console.error(err));
     };
 
     const descargarPDF = (cedula) => {
-        fetch(`http://coni-backend.onrender.com/DescargarPDFServlet?cedula=${cedula}`)
+        fetch(`https://coni-backend.onrender.com/DescargarPDFServlet?cedula=${cedula}`)
             .then(response => {
                 if (!response.ok) throw new Error("No se pudo descargar el PDF");
                 return response.blob();

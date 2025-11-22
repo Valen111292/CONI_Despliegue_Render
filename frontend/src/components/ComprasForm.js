@@ -126,7 +126,7 @@ const ComprasForm = () => {
                 queryParams.append('search', searchKeyword.trim());
             }
 
-            const url = `http://coni-backend.onrender.com/listar-solicitudes-compra?${queryParams.toString()}`;
+            const url = `https://coni-backend.onrender.com/listar-solicitudes-compra?${queryParams.toString()}`;
 
             const response = await fetch(url, {
                 credentials: 'include'
@@ -200,7 +200,7 @@ const ComprasForm = () => {
         };
 
         try {
-            const response = await fetch('http://coni-backend.onrender.com/solicitudes-compra', {
+            const response = await fetch('https://coni-backend.onrender.com/solicitudes-compra', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -259,7 +259,7 @@ const ComprasForm = () => {
 
         if (!solicitudToEdit) return;
 
-        const url = `http://coni-backend.onrender.com/solicitudes-compra/${solicitudToEdit.id}`;
+        const url = `https://coni-backend.onrender.com/solicitudes-compra/${solicitudToEdit.id}`;
 
         try {
             const response = await fetch(url, {
@@ -298,7 +298,7 @@ const ComprasForm = () => {
         setMensajeEdicion('');
 
         if (window.confirm('¿Estás seguro de que quieres eliminar esta solicitud?')) {
-            const url = `http://coni-backend.onrender.com/solicitudes-compra/${solicitudId}`;
+            const url = `https://coni-backend.onrender.com/solicitudes-compra/${solicitudId}`;
             try {
                 const response = await fetch(url, {
                     method: 'DELETE',
@@ -333,7 +333,7 @@ const ComprasForm = () => {
 
     const handleLogout = async () => {
         try {
-            const response = await fetch("http://coni-backend.onrender.com/LogoutServlet", {
+            const response = await fetch("https://coni-backend.onrender.com/LogoutServlet", {
                 method: "GET",
                 credentials: "include"
             });
