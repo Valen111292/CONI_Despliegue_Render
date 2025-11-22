@@ -24,7 +24,7 @@ public class InformeServlet extends HttpServlet {
 
     // Método auxiliar para obtener el ID de usuario de la sesión
     private Integer getUserIdFromSession(HttpServletRequest request) {
-        HttpSession session = request.getSession(false);
+        HttpSession session = request.getSession(true); // <--- ESTO ES LO QUE LO ARREGLA
         if (session != null) {
             return (Integer) session.getAttribute("idUsuario");
         }
@@ -83,9 +83,15 @@ public class InformeServlet extends HttpServlet {
             e.printStackTrace();
         } finally {
             try {
-                if (rs != null) rs.close();
-                if (stmt != null) stmt.close();
-                if (conn != null) conn.close();
+                if (rs != null) {
+                    rs.close();
+                }
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -129,14 +135,18 @@ public class InformeServlet extends HttpServlet {
             item.put("estado", rs.getString("estado")); // Estado actual del equipo/periférico
             rawItems.put(item);
         }
-        if (rs != null) rs.close();
-        if (stmt != null) stmt.close();
+        if (rs != null) {
+            rs.close();
+        }
+        if (stmt != null) {
+            stmt.close();
+        }
 
         // 2. Obtener la última asignación de cada empleado de la tabla 'actas'
         Map<String, JSONObject> latestAssignments = new HashMap<>(); // Key: n_inventario, Value: {asignadoA, fechaAsignacion (long)}
 
-        String sqlActas = "SELECT a.n_inventario, a.cedula, a.fecha, e.nombre " +
-                          "FROM actas a JOIN empleados e ON a.cedula = e.cedula ORDER BY a.fecha DESC";
+        String sqlActas = "SELECT a.n_inventario, a.cedula, a.fecha, e.nombre "
+                + "FROM actas a JOIN empleados e ON a.cedula = e.cedula ORDER BY a.fecha DESC";
         stmt = conn.prepareStatement(sqlActas);
         rs = stmt.executeQuery();
 
@@ -149,16 +159,19 @@ public class InformeServlet extends HttpServlet {
             for (String inv : individualInventarios) {
                 String trimmedInv = inv.trim();
                 if (!latestAssignments.containsKey(trimmedInv) || fechaActa.after(new Timestamp(latestAssignments.get(trimmedInv).getLong("fechaAsignacion")))) {
-                     JSONObject assigneeInfo = new JSONObject();
-                     assigneeInfo.put("asignadoA", assigneeName);
-                     assigneeInfo.put("fechaAsignacion", fechaActa.getTime()); // Guardar como milisegundos (long)
-                     latestAssignments.put(trimmedInv, assigneeInfo);
+                    JSONObject assigneeInfo = new JSONObject();
+                    assigneeInfo.put("asignadoA", assigneeName);
+                    assigneeInfo.put("fechaAsignacion", fechaActa.getTime()); // Guardar como milisegundos (long)
+                    latestAssignments.put(trimmedInv, assigneeInfo);
                 }
             }
         }
-        if (rs != null) rs.close();
-        if (stmt != null) stmt.close();
-
+        if (rs != null) {
+            rs.close();
+        }
+        if (stmt != null) {
+            stmt.close();
+        }
 
         // 3. Combinar los datos de equipos_perifericos con la información de asignación
         for (int i = 0; i < rawItems.length(); i++) {
@@ -200,9 +213,9 @@ public class InformeServlet extends HttpServlet {
         ResultSet rs = null;
 
         // MODIFICACIÓN: Unir con la tabla 'usuarios' para obtener el nombre del generador
-        String sql = "SELECT ig.id, ig.fecha_generacion, ig.id_usuario_generador, ig.estado_filtro, u.nombre AS nombre_usuario_generador " +
-                     "FROM informes_generados ig JOIN usuarios u ON ig.id_usuario_generador = u.id " +
-                     "ORDER BY ig.fecha_generacion DESC";
+        String sql = "SELECT ig.id, ig.fecha_generacion, ig.id_usuario_generador, ig.estado_filtro, u.nombre AS nombre_usuario_generador "
+                + "FROM informes_generados ig JOIN usuarios u ON ig.id_usuario_generador = u.id "
+                + "ORDER BY ig.fecha_generacion DESC";
         stmt = conn.prepareStatement(sql);
         rs = stmt.executeQuery();
 
@@ -248,7 +261,6 @@ public class InformeServlet extends HttpServlet {
             out.print("{\"mensaje\": \"Informe histórico no encontrado.\", \"estado\": \"error\"}");
         }
     }
-
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -318,8 +330,16 @@ public class InformeServlet extends HttpServlet {
             out.print("{\"mensaje\": \"Error interno del servidor: " + e.getMessage() + "\", \"estado\": \"error\"}");
             e.printStackTrace();
         } finally {
-                if (stmt != null) try { stmt.close(); } catch (SQLException e) { e.printStackTrace(); }
-                if (conn != null) try { conn.close(); } catch (SQLException e) { e.printStackTrace(); }
+            if (stmt != null) try {
+                stmt.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            if (conn != null) try {
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
             out.flush();
         }
     }
