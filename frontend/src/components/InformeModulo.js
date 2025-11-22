@@ -82,7 +82,7 @@ const InformeModulo = () => {
                 queryParams.append('filterStatus', filterStatus);
             }
 
-            const url = `http://localhost:8080/informes/inventario?${queryParams.toString()}`;
+            const url = `http://coni-backend.onrender.com/informes/inventario?${queryParams.toString()}`;
             const response = await fetch(url, { credentials: 'include' });
 
             if (!response.ok) {
@@ -108,7 +108,7 @@ const InformeModulo = () => {
         setErrorHistorico('');
 
         try {
-            const url = `http://localhost:8080/informes/historico`;
+            const url = `http://coni-backend.onrender.com/informes/historico`;
             const response = await fetch(url, { credentials: 'include' });
 
             if (!response.ok) {
@@ -148,7 +148,7 @@ const InformeModulo = () => {
                 reporteJson: JSON.stringify(reportData) // Convertir el array de objetos a una cadena JSON
             };
 
-            const response = await fetch('http://localhost:8080/informes/guardar', {
+            const response = await fetch('http://coni-backend.onrender.com/informes/guardar', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(reportToSave),
@@ -179,7 +179,7 @@ const InformeModulo = () => {
             return;
         }
         try {
-            const url = `http://localhost:8080/informes/historico?id=${reportId}`;
+            const url = `http://coni-backend.onrender.com/informes/historico?id=${reportId}`;
             const response = await fetch(url, { credentials: 'include' });
 
             if (!response.ok) {
@@ -210,7 +210,7 @@ const InformeModulo = () => {
             return;
         }
         try {
-            const url = `http://localhost:8080/informes/historico?id=${reportId}`;
+            const url = `http://coni-backend.onrender.com/informes/historico?id=${reportId}`;
             const response = await fetch(url, { credentials: 'include' });
 
             if (!response.ok) {
@@ -235,7 +235,7 @@ const InformeModulo = () => {
     // --- FUNCIÓN PARA CERRAR SESIÓN ---
     const handleLogout = async () => {
         try {
-            const response = await fetch("http://localhost:8080/LogoutServlet", {
+            const response = await fetch("http://coni-backend.onrender.com/LogoutServlet", {
                 method: "GET",
                 credentials: "include"
             });

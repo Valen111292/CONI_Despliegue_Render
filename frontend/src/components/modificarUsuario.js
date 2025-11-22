@@ -19,7 +19,7 @@ function ModificarUsuario() {
 
   const handleLogout = async () => {
     try {
-      const response = await fetch("http://localhost:8080/LogoutServlet", {
+      const response = await fetch("http://coni-backend.onrender.com/LogoutServlet", {
         method: "GET",
         credentials: "include"
       });
@@ -39,7 +39,7 @@ function ModificarUsuario() {
   };
 
   const handleBuscar = () => {
-    fetch(`http://localhost:8080/api/usuarios/cedula?cedula=${cedula}`)
+    fetch(`http://coni-backend.onrender.com/api/usuarios/cedula?cedula=${cedula}`)
       .then(response => {
         if (!response.ok) {
           throw new Error("Usuario no encontrado");
@@ -58,7 +58,7 @@ function ModificarUsuario() {
 
   const handleModificar = () => {
     if (!usuario) return;
-    fetch(`http://localhost:8080/usuarios/modificar`, {
+    fetch(`http://coni-backend.onrender.com/usuarios/modificar`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json"
@@ -72,7 +72,7 @@ function ModificarUsuario() {
   const handleEliminar = () => {
     if (!usuario) return;
     if (window.confirm("¿Seguro que deseas eliminar este usuario?")) {
-      fetch(`http://localhost:8080/usuarios/eliminar?id=${usuario.id}`, {
+      fetch(`http://coni-backend.onrender.com/usuarios/eliminar?id=${usuario.id}`, {
         method: "DELETE",
         credentials: "include",
       })
