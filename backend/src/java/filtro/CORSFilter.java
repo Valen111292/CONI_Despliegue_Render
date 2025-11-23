@@ -27,6 +27,8 @@ public class CORSFilter implements Filter {
         res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With, Accept");
         res.setHeader("Access-Control-Allow-Credentials", "true");
         res.setHeader("Access-Control-Max-Age", "3600");
+        res.setHeader("Access-Control-Expose-Headers", "Set-Cookie");
+
 
         // Preflight
         if ("OPTIONS".equalsIgnoreCase(req.getMethod())) {

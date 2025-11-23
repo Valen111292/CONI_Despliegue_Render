@@ -24,9 +24,9 @@ public class EquipoDAO {
             ps.setString(3, equipo.getTipo());
             ps.setString(4, equipo.getClase());
             ps.setString(5, equipo.getMarca());
-            ps.setString(6, equipo.getRam());
-            ps.setString(7, equipo.getDisco());
-            ps.setString(8, equipo.getProcesador());
+            ps.setString(6, equipo.getRam() != null && !equipo.getRam().isEmpty() ? equipo.getRam() : null);
+            ps.setString(7, equipo.getDisco() != null && !equipo.getDisco().isEmpty() ? equipo.getDisco() : null);
+            ps.setString(8, equipo.getProcesador() != null && !equipo.getProcesador().isEmpty() ? equipo.getProcesador() : null);
             ps.setString(9, equipo.getEstado());
 
             int filas = ps.executeUpdate();
@@ -37,13 +37,13 @@ public class EquipoDAO {
     public String generarNumeroInventario(String clase) throws SQLException {
         String prefijo = clase.equalsIgnoreCase("periferico") ? "PER" : "EQ";
         int longitudPrefijo = prefijo.length();
-        
-        String query = "SELECT MAX(CAST(SUBSTRING(n_inventario, " + (longitudPrefijo + 1) + ") AS UNSIGNED)) AS max_num " +
-                   "FROM equipos_perifericos WHERE n_inventario LIKE ?";
+
+        String query = "SELECT MAX(CAST(SUBSTRING(n_inventario FROM " + (longitudPrefijo + 1) + ") AS INTEGER)) AS max_num "
+                + "FROM equipos_perifericos WHERE n_inventario LIKE ?";
 
         try (Connection con = Conexion.getConnection(); PreparedStatement ps = con.prepareStatement(query)) {
             ps.setString(1, prefijo + "%");
-            
+
             ResultSet rs = ps.executeQuery();
             int siguiente = 1;
             if (rs.next()) {
@@ -90,32 +90,30 @@ public class EquipoDAO {
 
         return lista;
     }
-    
+
     public List<EquipoVO> listarEquiposPorEstado(String estado) throws SQLException {
-    List<EquipoVO> lista = new ArrayList<>();
-    String sql = "SELECT * FROM equipos_perifericos WHERE estado = ?";
-    try (Connection con = Conexion.getConnection();
-         PreparedStatement ps = con.prepareStatement(sql)) {
-        ps.setString(1, estado.toUpperCase());
-        try (ResultSet rs = ps.executeQuery()) {
-            while (rs.next()) {
-                EquipoVO e = new EquipoVO();
-                e.setN_inventario(rs.getString("n_inventario"));
-                e.setN_serie(rs.getString("n_serie"));
-                e.setClase(rs.getString("clase"));
-                e.setTipo(rs.getString("tipo"));
-                e.setMarca(rs.getString("marca"));
-                e.setRam(rs.getString("ram"));
-                e.setDisco(rs.getString("disco"));
-                e.setProcesador(rs.getString("procesador"));
-                e.setEstado(rs.getString("estado"));
-                lista.add(e);
+        List<EquipoVO> lista = new ArrayList<>();
+        String sql = "SELECT * FROM equipos_perifericos WHERE estado = ?";
+        try (Connection con = Conexion.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, estado.toUpperCase());
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    EquipoVO e = new EquipoVO();
+                    e.setN_inventario(rs.getString("n_inventario"));
+                    e.setN_serie(rs.getString("n_serie"));
+                    e.setClase(rs.getString("clase"));
+                    e.setTipo(rs.getString("tipo"));
+                    e.setMarca(rs.getString("marca"));
+                    e.setRam(rs.getString("ram"));
+                    e.setDisco(rs.getString("disco"));
+                    e.setProcesador(rs.getString("procesador"));
+                    e.setEstado(rs.getString("estado"));
+                    lista.add(e);
+                }
             }
         }
+        return lista;
     }
-    return lista;
-}
-
 
     public boolean eliminarEquipo(String n_inventario) throws SQLException {
         String sql = "DELETE FROM equipos_perifericos WHERE n_inventario = ?";
@@ -133,9 +131,9 @@ public class EquipoDAO {
             stmt.setString(2, equipo.getClase().toUpperCase());
             stmt.setString(3, equipo.getTipo().toUpperCase());
             stmt.setString(4, equipo.getMarca().toUpperCase());
-            stmt.setString(5, equipo.getRam().toUpperCase());
-            stmt.setString(6, equipo.getDisco().toUpperCase());
-            stmt.setString(7, equipo.getProcesador().toUpperCase());
+            stmt.setString(5, equipo.getRam() != null ? equipo.getRam().toUpperCase() : null);
+            stmt.setString(6, equipo.getDisco() != null ? equipo.getDisco().toUpperCase() : null);
+            stmt.setString(7, equipo.getProcesador() != null ? equipo.getProcesador().toUpperCase() : null);
             stmt.setString(8, equipo.getEstado().toUpperCase());
             stmt.setString(9, equipo.getN_inventario());
 

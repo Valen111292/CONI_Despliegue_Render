@@ -7,7 +7,6 @@ RUN npm install
 
 COPY . .
 
-# 🔥 Fix permisos para react-scripts (Windows → Linux issue)
 RUN chmod +x node_modules/.bin/react-scripts
 
 RUN npm run build

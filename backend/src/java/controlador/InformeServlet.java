@@ -24,7 +24,7 @@ public class InformeServlet extends HttpServlet {
 
     // Método auxiliar para obtener el ID de usuario de la sesión
     private Integer getUserIdFromSession(HttpServletRequest request) {
-        HttpSession session = request.getSession(true); // <--- ESTO ES LO QUE LO ARREGLA
+        HttpSession session = request.getSession(false); 
         if (session != null) {
             return (Integer) session.getAttribute("idUsuario");
         }

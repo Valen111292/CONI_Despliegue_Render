@@ -4,7 +4,7 @@ FROM tomcat:10.1-jdk17-temurin
 # Eliminar apps por defecto de Tomcat
 RUN rm -rf /usr/local/tomcat/webapps/*
 
-# Copiar el WAR generado por NetBeans (asegúrate de hacer Clean and Build antes)
+# Copiar el WAR generado por NetBeans 
 COPY dist/CONI.war /usr/local/tomcat/webapps/ROOT.war
 
 # Exponer puerto 8080
