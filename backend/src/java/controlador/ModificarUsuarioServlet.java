@@ -1,12 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package controlador;
 
 import com.google.gson.Gson;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.*;
 import jakarta.servlet.http.*;
@@ -14,42 +9,48 @@ import java.io.BufferedReader;
 import modelo.Usuario;
 import dao.UsuarioDAO;
 
-/**
- *
- * @author ansap
- */
 @WebServlet("/api/usuarios/modificar")
 public class ModificarUsuarioServlet extends HttpServlet {
     
     private final UsuarioDAO usuarioDAO = new UsuarioDAO();
     private final Gson gson = new Gson();
 
+    private void configurarCORS(HttpServletResponse response) {
+        response.setHeader("Access-Control-Allow-Origin", "https://coni-frontend.onrender.com");
+        response.setHeader("Access-Control-Allow-Credentials", "true");
+        response.setHeader("Access-Control-Allow-Headers", "Content-Type");
+        response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+    }
+
+    @Override
+    protected void doOptions(HttpServletRequest request, HttpServletResponse response)
+            throws IOException {
+        configurarCORS(response);
+    }
+
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws IOException {
+
+        configurarCORS(response);
         response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        
-        StringBuilder jsonBuffer = new StringBuilder();
-        String line;
-        try (BufferedReader reader = request.getReader()) {
-            while ((line = reader.readLine()) !=null){
-                jsonBuffer.append(line);
+
+        StringBuilder sb = new StringBuilder();
+        request.getReader().lines().forEach(sb::append);
+
+        try {
+            Usuario usuario = gson.fromJson(sb.toString(), Usuario.class);
+
+            if (usuarioDAO.modificar(usuario)) {
+                response.getWriter().write("{\"mensaje\":\"Usuario modificado correctamente\"}");
+            } else {
+                response.setStatus(404);
+                response.getWriter().write("{\"error\":\"No se encontró el usuario\"}");
             }
+
+        } catch (Exception e) {
+            response.setStatus(400);
+            response.getWriter().write("{\"error\":\"Datos inválidos\"}");
         }
-    try {
-        Usuario usuario = gson.fromJson(jsonBuffer.toString(), Usuario.class);
-        boolean modificado = usuarioDAO.modificar(usuario);
-        if (modificado){
-            response.getWriter().write("{\"mensaje\":\"Usuario modificado correctamente\"}");
-        } else {
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            response.getWriter().write("{\"error\":\"no se encontró el usuario para modificar}");
-        }
-    } catch (Exception e){
-        e.printStackTrace();
-        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-        response.getWriter().write("{\"error\":\"Datos inválidos\"}");
     }
-}
 }

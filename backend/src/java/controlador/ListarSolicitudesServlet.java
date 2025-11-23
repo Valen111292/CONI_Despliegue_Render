@@ -19,9 +19,28 @@ import Conexion.Conexion;
 @WebServlet("/listar-solicitudes-compra")
 public class ListarSolicitudesServlet extends HttpServlet {
 
+    // -------------------------------
+    // CORS GENERAL
+    // -------------------------------
+    private void configurarCORS(HttpServletResponse response) {
+        response.setHeader("Access-Control-Allow-Origin", "https://coni-frontend.onrender.com");
+        response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+        response.setHeader("Access-Control-Allow-Headers", "Content-Type");
+        response.setHeader("Access-Control-Allow-Credentials", "true");
+    }
+
+    @Override
+    protected void doOptions(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        configurarCORS(response);
+    }
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
+        configurarCORS(response);
+
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
@@ -29,6 +48,7 @@ public class ListarSolicitudesServlet extends HttpServlet {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
+
         JSONArray solicitudesArray = new JSONArray();
 
         try {
@@ -42,55 +62,43 @@ public class ListarSolicitudesServlet extends HttpServlet {
                 rolAutenticacion = (String) session.getAttribute("rolAutenticacion");
                 cargoEmpleado = (String) session.getAttribute("cargoEmpleado");
             }
+
             if (idUsuario == null || rolAutenticacion == null) {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                out.print("{\"mensaje\": \"Usuario no autenticado o sesión expirada, o no tiene cargo asignado.\", \"estado\": \"error\"}");
+                out.print("{\"mensaje\": \"Usuario no autenticado o sesión expirada.\", \"estado\": \"error\"}");
                 return;
             }
 
             conn = Conexion.getConnection();
 
-            // --- Parámetros de ordenamiento y filtrado ---
+            // Parámetros
             String sortBy = request.getParameter("sortBy");
             String order = request.getParameter("order");
             String filterPriority = request.getParameter("filterPriority");
             String searchQuery = request.getParameter("search");
 
-            StringBuilder sqlBuilder = new StringBuilder("SELECT id, tipo_solicitud, descripcion, alta_prioridad, fecha_solicitud, estado, id_usuario FROM solicitudes_compra");
+            StringBuilder sql = new StringBuilder("SELECT id, tipo_solicitud, descripcion, alta_prioridad, fecha_solicitud, estado, id_usuario FROM solicitudes_compra WHERE 1=1 ");
 
-            // Condiciones WHERE
-            sqlBuilder.append(" WHERE 1=1"); // Cláusula siempre verdadera para facilitar la adición de ANDs
+            boolean filtrarPorUsuario = !("usuario".equalsIgnoreCase(rolAutenticacion)
+                    && "Otro".equalsIgnoreCase(cargoEmpleado));
 
-            // Lógica corregida para filtrar por id_usuario
-            // Solo se filtra por id_usuario si el rol NO es "usuario" Y el cargo NO es "Otro"
-            if (!("usuario".equalsIgnoreCase(rolAutenticacion) && "Otro".equalsIgnoreCase(cargoEmpleado))) {
-                sqlBuilder.append(" AND id_usuario = ?");
+            if (filtrarPorUsuario) {
+                sql.append(" AND id_usuario = ?");
             }
 
             if (filterPriority != null && !filterPriority.equalsIgnoreCase("all")) {
-                sqlBuilder.append(" AND alta_prioridad = ?");
+                sql.append(" AND alta_prioridad = ?");
             }
 
             if (searchQuery != null && !searchQuery.trim().isEmpty()) {
-                // Búsqueda por palabras clave en descripción o tipo_solicitud
-                // Asegúrate de que tu base de datos soporta LIKE para búsqueda insensible a mayúsculas/minúsculas
-                // Si usas MySQL/SQL Server, podrías necesitar LIKE o LOWER()
-                sqlBuilder.append(" AND (descripcion LIKE ? OR tipo_solicitud LIKE ?)");
+                sql.append(" AND (descripcion LIKE ? OR tipo_solicitud LIKE ?)");
             }
 
-            // --- Normalizar sortBy ---
-            if (sortBy == null || sortBy.trim().isEmpty()) {
-                sortBy = "fecha"; // el frontend lo llama así, nosotros lo traducimos
-            } else {
-                sortBy = sortBy.trim().toLowerCase();
-            }
-
-// --- Traducir sortBy a nombres válidos de columnas ---
+            // Orden
             String columnaOrden;
+            sortBy = sortBy != null ? sortBy.toLowerCase() : "fecha";
+
             switch (sortBy) {
-                case "fecha":
-                    columnaOrden = "fecha_solicitud";
-                    break;
                 case "estado":
                     columnaOrden = "estado";
                     break;
@@ -101,77 +109,54 @@ public class ListarSolicitudesServlet extends HttpServlet {
                     columnaOrden = "tipo_solicitud";
                     break;
                 default:
-                    columnaOrden = "fecha_solicitud"; // fallback seguro
+                    columnaOrden = "fecha_solicitud";
             }
 
-// --- Normalizar order ---
             String ordenFinal = "ASC";
-            if ("desc".equalsIgnoreCase(order)) {
-                ordenFinal = "DESC";
-            }
+            if ("desc".equalsIgnoreCase(order)) ordenFinal = "DESC";
 
-// --- Agregar ORDER BY ---
-            sqlBuilder.append(" ORDER BY ").append(columnaOrden).append(" ").append(ordenFinal);
+            sql.append(" ORDER BY ").append(columnaOrden).append(" ").append(ordenFinal);
 
-            String sql = sqlBuilder.toString();
-            stmt = conn.prepareStatement(sql);
+            stmt = conn.prepareStatement(sql.toString());
 
-            int paramIndex = 1;
-            // Lógica corregida para establecer el parámetro id_usuario
-            // Solo se establece el parámetro si el rol NO es "usuario" Y el cargo NO es "Otro"
-            if (!("usuario".equalsIgnoreCase(rolAutenticacion) && "Otro".equalsIgnoreCase(cargoEmpleado))) {
-                stmt.setInt(paramIndex++, idUsuario);
+            int index = 1;
+
+            if (filtrarPorUsuario) {
+                stmt.setInt(index++, idUsuario);
             }
 
             if (filterPriority != null && !filterPriority.equalsIgnoreCase("all")) {
-                stmt.setBoolean(paramIndex++, Boolean.parseBoolean(filterPriority));
+                stmt.setBoolean(index++, Boolean.parseBoolean(filterPriority));
             }
 
             if (searchQuery != null && !searchQuery.trim().isEmpty()) {
-                stmt.setString(paramIndex++, "%" + searchQuery + "%");
-                stmt.setString(paramIndex++, "%" + searchQuery + "%");
+                stmt.setString(index++, "%" + searchQuery + "%");
+                stmt.setString(index++, "%" + searchQuery + "%");
             }
 
             rs = stmt.executeQuery();
 
             while (rs.next()) {
-                JSONObject solicitudJson = new JSONObject();
-                solicitudJson.put("id", rs.getInt("id"));
-                solicitudJson.put("tipoSolicitud", rs.getString("tipo_solicitud"));
-                solicitudJson.put("descripcion", rs.getString("descripcion"));
-                solicitudJson.put("altaPrioridad", rs.getBoolean("alta_prioridad"));
-                solicitudJson.put("fechaSolicitud", rs.getTimestamp("fecha_solicitud"));
-                solicitudJson.put("estado", rs.getString("estado"));
-                solicitudJson.put("idUsuario", rs.getInt("id_usuario"));
-                solicitudesArray.put(solicitudJson);
+                JSONObject json = new JSONObject();
+                json.put("id", rs.getInt("id"));
+                json.put("tipoSolicitud", rs.getString("tipo_solicitud"));
+                json.put("descripcion", rs.getString("descripcion"));
+                json.put("altaPrioridad", rs.getBoolean("alta_prioridad"));
+                json.put("fechaSolicitud", rs.getTimestamp("fecha_solicitud"));
+                json.put("estado", rs.getString("estado"));
+                json.put("idUsuario", rs.getInt("id_usuario"));
+                solicitudesArray.put(json);
             }
 
-            out.print(solicitudesArray.toString());
             response.setStatus(HttpServletResponse.SC_OK);
+            out.print(solicitudesArray.toString());
 
         } catch (SQLException e) {
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            out.print("{\"mensaje\": \"Error de base de datos al listar solicitudes: " + e.getMessage() + "\", \"estado\": \"error\"}");
-            e.printStackTrace();
+            response.setStatus(500);
+            out.print("{\"mensaje\": \"Error SQL: " + e.getMessage() + "\"}");
         } catch (Exception e) {
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            out.print("{\"mensaje\": \"Error interno del servidor al listar solicitudes: " + e.getMessage() + "\", \"estado\": \"error\"}");
-            e.printStackTrace();
-        } finally {
-            try {
-                if (rs != null) {
-                    rs.close();
-                }
-                if (stmt != null) {
-                    stmt.close();
-                }
-                if (conn != null) {
-                    conn.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            out.flush();
+            response.setStatus(500);
+            out.print("{\"mensaje\": \"Error interno: " + e.getMessage() + "\"}");
         }
     }
 }
