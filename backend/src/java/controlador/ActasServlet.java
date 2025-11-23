@@ -16,53 +16,54 @@ public class ActasServlet extends HttpServlet {
 
     @Override
     protected void doOptions(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setHeader("Access-Control-Allow-Origin", "http://localhost:3001");
+        response.setHeader("Access-Control-Allow-Origin", "https://coni-frontend.onrender.com");
         response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
         response.setHeader("Access-Control-Allow-Headers", "Content-Type");
         response.setHeader("Access-Control-Allow-Credentials", "true");
+
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse response) throws ServletException, IOException {
         // Permitir CORS
-        response.setHeader("Access-Control-Allow-Origin", "http://localhost:3001");
+        response.setHeader("Access-Control-Allow-Origin", "https://coni-frontend.onrender.com");
         response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
         response.setHeader("Access-Control-Allow-Headers", "Content-Type");
         response.setHeader("Access-Control-Allow-Credentials", "true");
 
         try {
-        BufferedReader reader = req.getReader();
-        Gson gson = new Gson();
-        ActaVO acta = gson.fromJson(reader, ActaVO.class);
+            BufferedReader reader = req.getReader();
+            Gson gson = new Gson();
+            ActaVO acta = gson.fromJson(reader, ActaVO.class);
 
-        String fecha = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-        acta.setFecha(fecha);
+            String fecha = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+            acta.setFecha(fecha);
 
-        String rutaPdf = "pdfs/Acta_" + acta.getCedula() + ".pdf";
+            String rutaPdf = "pdfs/Acta_" + acta.getCedula() + ".pdf";
 
-        ActaDAO dao = new ActaDAO();
-        boolean resultado = dao.insertarActa(acta, rutaPdf);
+            ActaDAO dao = new ActaDAO();
+            boolean resultado = dao.insertarActa(acta, rutaPdf);
 
-        if (resultado) {
-            dao.actualizarEstadoEquipos(acta.getN_inventario(), "asignado");
-            response.setContentType("application/json");
-            response.getWriter().write("{\"mensaje\": \"Acta registrada correctamente\"}");
-        } else {
+            if (resultado) {
+                dao.actualizarEstadoEquipos(acta.getN_inventario(), "asignado");
+                response.setContentType("application/json");
+                response.getWriter().write("{\"mensaje\": \"Acta registrada correctamente\"}");
+            } else {
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                response.getWriter().write("{\"mensaje\": \"Error al registrar el acta\"}");
+            }
+        } catch (Exception e) { // <--- INICIO DEL BLOQUE CATCH
+            e.printStackTrace(System.err); // Esto imprimirá la pila de la excepción en la consola de Tomcat
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            response.getWriter().write("{\"mensaje\": \"Error al registrar el acta\"}");
+            response.setContentType("application/json");
+            response.getWriter().write("{\"mensaje\": \"Error interno del servidor: " + e.getMessage() + "\"}");
         }
-    } catch (Exception e) { // <--- INICIO DEL BLOQUE CATCH
-        e.printStackTrace(System.err); // Esto imprimirá la pila de la excepción en la consola de Tomcat
-        response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-        response.setContentType("application/json");
-        response.getWriter().write("{\"mensaje\": \"Error interno del servidor: " + e.getMessage() + "\"}");
     }
-}
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setHeader("Access-Control-Allow-Origin", "http://localhost:3001");
+        response.setHeader("Access-Control-Allow-Origin", "https://coni-frontend.onrender.com");
         response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
         response.setHeader("Access-Control-Allow-Headers", "Content-Type");
         response.setHeader("Access-Control-Allow-Credentials", "true");
