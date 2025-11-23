@@ -36,8 +36,8 @@ public class ActasServlet extends HttpServlet {
             Gson gson = new Gson();
             ActaVO acta = gson.fromJson(reader, ActaVO.class);
 
-            String fecha = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-            acta.setFecha(fecha);
+            java.sql.Date fechaActual = new java.sql.Date(System.currentTimeMillis());
+            acta.setFecha(fechaActual.toString());  
 
             String rutaPdf = "pdfs/Acta_" + acta.getCedula() + ".pdf";
 

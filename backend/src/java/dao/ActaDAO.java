@@ -22,7 +22,7 @@ public class ActaDAO {
             ps.setString(1, acta.getNombre_completo());
             ps.setString(2, acta.getCedula());
             ps.setString(3, inventarios);
-            ps.setString(4, acta.getFecha());
+            ps.setDate(4, java.sql.Date.valueOf(acta.getFecha())); 
             ps.setString(5, rutaPdf);
 
             int filas = ps.executeUpdate();
@@ -63,7 +63,7 @@ public class ActaDAO {
                 acta.setId_acta(rs.getInt("id_acta"));
                 acta.setNombre_completo(rs.getString("nombre_completo"));
                 acta.setCedula(rs.getString("cedula"));
-                acta.setFecha(rs.getString("fecha"));
+                acta.setFecha(String.valueOf(rs.getDate("fecha"))); 
 
                 // Convertimos el texto de n_inventario (ej: EQ01,PER02) a lista
                 String inventarioStr = rs.getString("n_inventario");
