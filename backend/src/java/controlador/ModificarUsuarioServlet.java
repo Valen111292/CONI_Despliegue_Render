@@ -9,7 +9,7 @@ import java.io.BufferedReader;
 import modelo.Usuario;
 import dao.UsuarioDAO;
 
-@WebServlet("/api/usuarios/modificar")
+@WebServlet("/usuarios/modificar")
 public class ModificarUsuarioServlet extends HttpServlet {
     
     private final UsuarioDAO usuarioDAO = new UsuarioDAO();

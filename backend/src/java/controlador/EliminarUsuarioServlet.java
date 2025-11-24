@@ -6,7 +6,7 @@ import jakarta.servlet.*;
 import jakarta.servlet.annotation.*;
 import jakarta.servlet.http.*;
 
-@WebServlet("/api/usuarios/eliminar")
+@WebServlet("/usuarios/eliminar")
 public class EliminarUsuarioServlet extends HttpServlet {
 
     private final UsuarioDAO usuarioDAO = new UsuarioDAO();
