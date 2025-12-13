@@ -121,7 +121,6 @@ public class EquipoServlet extends HttpServlet {
                 response.setContentType("application/json");
                 response.getWriter().write("{\"message\":\"Equipo actualizado correctamente\"}");
             } else {
-                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
                 response.getWriter().write("{\"message\":\"No se encontró el equipo para actualizar\"}");
             }
         } catch (Exception e) {
@@ -131,3 +130,4 @@ public class EquipoServlet extends HttpServlet {
     }
 
 }
+    

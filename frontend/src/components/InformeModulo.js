@@ -27,7 +27,7 @@ const InformeModulo = () => {
     // Opciones de estado de asignación para el filtro (basadas en equipos_perifericos.estado)
     const assignmentStatusOptions = [
         { value: 'all', label: 'Todos los Estados' },
-        { value: 'ASIGNADO', label: 'Asignado' },
+        { value: 'ASIGNADO', label: 'asignado' },
         { value: 'DISPONIBLE', label: 'Disponible' },
         { value: 'PENDIENTE', label: 'Pendiente' },
         // Puedes añadir más estados si los tienes en tu DB para equipos_perifericos.estado
