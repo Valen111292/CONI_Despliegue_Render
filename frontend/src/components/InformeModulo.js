@@ -249,7 +249,8 @@ const InformeModulo = () => {
         localStorage.clear();
         sessionStorage.clear();
         navigate("/");
-    };
+    }
+};
 
   return (
   <div className="informe-modulo">
