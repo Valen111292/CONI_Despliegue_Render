@@ -15,68 +15,56 @@ const InformeModulo = () => {
     const [reportData, setReportData] = useState([]);
     const [cargandoReporte, setCargandoReporte] = useState(false);
     const [errorReporte, setErrorReporte] = useState('');
-    const [filterStatus, setFilterStatus] = useState('all');
+    const [filterStatus, setFilterStatus] = useState('all'); // Filtro de estado para el informe actual
 
     // --- ESTADOS PARA INFORMES HISTÓRICOS ---
     const [historicalReports, setHistoricalReports] = useState([]);
     const [cargandoHistorico, setCargandoHistorico] = useState(false);
     const [errorHistorico, setErrorHistorico] = useState('');
-    const [selectedHistoricalReportData, setSelectedHistoricalReportData] = useState(null);
+    const [selectedHistoricalReportData, setSelectedHistoricalReportData] = useState(null); // Para ver un informe histórico completo
     const [isHistoricalModalOpen, setIsHistoricalModalOpen] = useState(false);
 
+    // Opciones de estado de asignación para el filtro
     const assignmentStatusOptions = [
         { value: 'all', label: 'Todos los Estados' },
-        { value: 'ASIGNADO', label: 'Asignado' },
+        { value: 'ASIGNADO', label: 'asignado' },
         { value: 'DISPONIBLE', label: 'Disponible' },
-        { value: 'PENDIENTE', label: 'Pendiente' }
+        { value: 'PENDIENTE', label: 'Pendiente' },
     ];
 
-    // ===============================
-    // HEADERS AUTENTICACIÓN (iOS FIX)
-    // ===============================
-    const getAuthHeaders = () => {
-        const storedUserJSON = localStorage.getItem("usuarioLogueado");
-        const usuario = storedUserJSON ? JSON.parse(storedUserJSON) : null;
-
-        return {
-            'Content-Type': 'application/json',
-            'X-User-Id': usuario?.idUsuario || usuario?.id || ''
-        };
-    };
-
-    // ===============================
-    // VALIDAR USUARIO
-    // ===============================
+    // --- EFECTO PARA OBTENER Y VERIFICAR EL USUARIO AUTENTICADO ---
     useEffect(() => {
         const storedUserJSON = localStorage.getItem("usuarioLogueado");
 
-        if (!storedUserJSON) {
-            navigate("/");
-            return;
-        }
+        if (storedUserJSON) {
+            try {
+                const usuario = JSON.parse(storedUserJSON);
+                const id = usuario.idUsuario || usuario.id;
+                const rol = usuario.rolAutenticacion;
+                const cargo = usuario.cargoEmpleado || localStorage.getItem("cargoEmpleado");
 
-        try {
-            const usuario = JSON.parse(storedUserJSON);
-            const id = usuario.idUsuario || usuario.id;
-            const rol = usuario.rolAutenticacion;
-            const cargo = usuario.cargoEmpleado || localStorage.getItem("cargoEmpleado");
-
-            if (!id || !rol || !cargo || rol !== 'admin') {
+                if (id && rol && cargo) {
+                    setCurrentUser({ id, rol, cargo });
+                    if (rol !== 'admin') {
+                        console.warn(`InformeModulo: Rol (${rol}) sin permiso. Redirigiendo a inicio.`);
+                        navigate("/");
+                    }
+                } else {
+                    console.warn("InformeModulo: Información de usuario incompleta. Redirigiendo a inicio.");
+                    navigate("/");
+                }
+            } catch (e) {
+                console.error("Error al parsear datos del usuario de localStorage:", e);
                 navigate("/");
-                return;
             }
-
-            setCurrentUser({ id, rol, cargo });
-        } catch {
+        } else {
+            console.warn("InformeModulo: No se encontró 'usuarioLogueado' en localStorage. Redirigiendo a inicio.");
             navigate("/");
-        } finally {
-            setCargandoUsuario(false);
         }
+        setCargandoUsuario(false);
     }, [navigate]);
 
-    // ===============================
-    // INFORME ACTUAL
-    // ===============================
+    // --- FUNCIÓN PARA OBTENER EL INFORME DE INVENTARIO ACTUAL ---
     const fetchCurrentReport = useCallback(async () => {
         if (!currentUser?.id) return;
 
@@ -84,35 +72,30 @@ const InformeModulo = () => {
         setErrorReporte('');
 
         try {
-            const params = new URLSearchParams();
+            const queryParams = new URLSearchParams();
             if (filterStatus !== 'all') {
-                params.append('filterStatus', filterStatus);
+                queryParams.append('filterStatus', filterStatus);
             }
 
-            const response = await fetch(
-                `https://coni-backend.onrender.com/informes/inventario?${params.toString()}`,
-                {
-                    credentials: 'include',
-                    headers: getAuthHeaders()
-                }
-            );
+            const url = `https://coni-backend.onrender.com/informes/inventario?${queryParams.toString()}`;
+            const response = await fetch(url, { credentials: 'include' });
 
             if (!response.ok) {
-                throw new Error('Error al cargar informe');
+                const errorData = await response.json();
+                throw new Error(`HTTP error! status: ${response.status}, Mensaje: ${errorData.mensaje || 'Error desconocido'}`);
             }
 
             const data = await response.json();
             setReportData(data);
         } catch (err) {
-            setErrorReporte(err.message);
+            console.error('Error al obtener el informe actual:', err);
+            setErrorReporte(`No se pudo cargar el informe: ${err.message}`);
         } finally {
             setCargandoReporte(false);
         }
-    }, [currentUser, filterStatus]);
+    }, [currentUser?.id, filterStatus]);
 
-    // ===============================
-    // HISTÓRICOS
-    // ===============================
+    // --- FUNCIÓN PARA OBTENER LA LISTA DE INFORMES HISTÓRICOS ---
     const fetchHistoricalReports = useCallback(async () => {
         if (!currentUser?.id) return;
 
@@ -120,27 +103,25 @@ const InformeModulo = () => {
         setErrorHistorico('');
 
         try {
-            const response = await fetch(
-                'https://coni-backend.onrender.com/informes/historico',
-                {
-                    credentials: 'include',
-                    headers: getAuthHeaders()
-                }
-            );
+            const url = `https://coni-backend.onrender.com/informes/historico`;
+            const response = await fetch(url, { credentials: 'include' });
 
             if (!response.ok) {
-                throw new Error('Error al cargar históricos');
+                const errorData = await response.json();
+                throw new Error(`HTTP error! status: ${response.status}, Mensaje: ${errorData.mensaje || 'Error desconocido'}`);
             }
 
             const data = await response.json();
             setHistoricalReports(data);
         } catch (err) {
-            setErrorHistorico(err.message);
+            console.error('Error al obtener informes históricos:', err);
+            setErrorHistorico(`No se pudieron cargar los informes históricos: ${err.message}`);
         } finally {
             setCargandoHistorico(false);
         }
-    }, [currentUser]);
+    }, [currentUser?.id]);
 
+    // --- EFECTO INICIAL ---
     useEffect(() => {
         if (currentUser) {
             fetchCurrentReport();
@@ -148,64 +129,66 @@ const InformeModulo = () => {
         }
     }, [currentUser, fetchCurrentReport, fetchHistoricalReports]);
 
-    // ===============================
-    // GUARDAR + DESCARGAR
-    // ===============================
+    // --- FUNCIÓN PARA GUARDAR Y DESCARGAR EL INFORME ACTUAL ---
     const handleGenerateAndDownload = async () => {
-        if (reportData.length === 0) return;
+        if (reportData.length === 0) {
+            alert("No hay datos para generar el informe.");
+            return;
+        }
 
-        await fetch('https://coni-backend.onrender.com/informes/guardar', {
-            method: 'POST',
-            credentials: 'include',
-            headers: getAuthHeaders(),
-            body: JSON.stringify({
+        try {
+            const reportToSave = {
                 estadoFiltro: filterStatus,
                 reporteJson: JSON.stringify(reportData)
-            })
-        });
+            };
 
-        fetchHistoricalReports();
-        exportToExcel(reportData, `Informe_Inventario_${filterStatus}`);
+            const response = await fetch('https://coni-backend.onrender.com/informes/guardar', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(reportToSave),
+                credentials: 'include'
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                alert(data.mensaje);
+                fetchHistoricalReports();
+            } else {
+                alert(`Error al guardar informe: ${data.mensaje || 'Ocurrió un error desconocido.'}`);
+            }
+        } catch (error) {
+            console.error('Error al guardar el informe:', error);
+            alert('Error de conexión con el servidor al guardar el informe.');
+        }
+
+        exportToExcel(reportData, `Informe_Inventario_${filterStatus}_${new Date().toISOString().slice(0, 10)}`);
     };
 
-    // ===============================
-    // HISTÓRICO DETALLE
-    // ===============================
-    const fetchHistoricalDetail = async (id, download = false) => {
-        const response = await fetch(
-            `https://coni-backend.onrender.com/informes/historico?id=${id}`,
-            {
-                credentials: 'include',
-                headers: getAuthHeaders()
+    // --- FUNCIÓN PARA DESCARGAR UN INFORME HISTÓRICO ESPECÍFICO ---
+    const handleDownloadHistorical = async (reportId, filename) => {
+        if (!currentUser?.id) {
+            alert("Usuario no autenticado.");
+            return;
+        }
+        try {
+            const url = `https://coni-backend.onrender.com/informes/historico?id=${reportId}`;
+            const response = await fetch(url, { credentials: 'include' });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(`HTTP error! status: ${response.status}, Mensaje: ${errorData.mensaje || 'Error desconocido'}`);
             }
-        );
 
-        const data = await response.json();
-
-        if (download) {
-            exportToExcel(data, `Informe_Historico_${id}`);
-        } else {
-            setSelectedHistoricalReportData(data);
-            setIsHistoricalModalOpen(true);
+            const data = await response.json();
+            exportToExcel(data, filename);
+        } catch (err) {
+            console.error('Error al descargar informe histórico:', err);
+            alert(`No se pudo descargar el informe histórico: ${err.message}`);
         }
     };
 
-    const handleViewHistorical = (id) => {
-        fetchHistoricalDetail(id, false);
-    };
-
-    const handleDownloadHistorical = (id) => {
-        fetchHistoricalDetail(id, true);
-    };
-
-    const handleCloseHistoricalModal = () => {
-        setIsHistoricalModalOpen(false);
-        setSelectedHistoricalReportData(null);
-    };
-
-    // ===============================
-    // EXCEL
-    // ===============================
+    // --- FUNCIÓN PARA EXPORTAR DATOS A EXCEL ---
     const exportToExcel = (data, filename) => {
         const ws = XLSX.utils.json_to_sheet(data);
         const wb = XLSX.utils.book_new();
@@ -213,54 +196,210 @@ const InformeModulo = () => {
         XLSX.writeFile(wb, `${filename}.xlsx`);
     };
 
-    // ===============================
-    // LOGOUT
-    // ===============================
-    const handleLogout = async () => {
-        await fetch("https://coni-backend.onrender.com/LogoutServlet", {
-            method: "GET",
-            credentials: "include",
-            headers: getAuthHeaders()
-        });
+    // --- VER DETALLES EN MODAL ---
+    const handleViewHistorical = async (reportId) => {
+        if (!currentUser?.id) {
+            alert("Usuario no autenticado.");
+            return;
+        }
+        try {
+            const url = `https://coni-backend.onrender.com/informes/historico?id=${reportId}`;
+            const response = await fetch(url, { credentials: 'include' });
 
-        localStorage.clear();
-        sessionStorage.clear();
-        navigate("/");
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(`HTTP error! status: ${response.status}, Mensaje: ${errorData.mensaje || 'Error desconocido'}`);
+            }
+
+            const data = await response.json();
+            setSelectedHistoricalReportData(data);
+            setIsHistoricalModalOpen(true);
+        } catch (err) {
+            console.error('Error al ver informe histórico:', err);
+            alert(`No se pudo cargar el informe histórico: ${err.message}`);
+        }
+    };
+
+    const handleCloseHistoricalModal = () => {
+        setIsHistoricalModalOpen(false);
+        setSelectedHistoricalReportData(null);
+    };
+
+    // --- FUNCIÓN PARA CERRAR SESIÓN ---
+    const handleLogout = async () => {
+        try {
+            const response = await fetch("https://coni-backend.onrender.com/LogoutServlet", {
+                method: "GET",
+                credentials: "include"
+            });
+            if (response.ok) {
+                localStorage.removeItem("usuarioLogueado");
+                localStorage.removeItem("rol");
+                localStorage.removeItem("idUsuario");
+                localStorage.removeItem("cargoEmpleado");
+                sessionStorage.clear();
+                localStorage.setItem("logoutMessage", "Sesión cerrada exitosamente");
+                navigate("/");
+            } else {
+                console.error("Error al cerrar sesión, status:", response.status);
+            }
+        } catch (error) {
+            console.error("Error al cerrar sesión", error);
+        }
     };
 
     return (
         <div className="informe-modulo">
             <header className="encabezado">
                 <img src={logo} className="imagen-encabezado" alt="Logo CONI" />
-                <button onClick={handleLogout}>Cerrar sesión</button>
+                <div className="barra-superior">
+                    <nav>
+                        <ul>
+                            <li><button onClick={handleLogout}>Cerrar sesión</button></li>
+                        </ul>
+                    </nav>
+                </div>
             </header>
 
             <main>
                 <h2>Generar Informes</h2>
-
-                {cargandoUsuario ? <p>Cargando usuario...</p> : (
+                {cargandoUsuario ? (
+                    <p>Cargando información del usuario...</p>
+                ) : (
                     <>
-                        <button onClick={fetchCurrentReport}>Actualizar</button>
+                        <div className="filtros-container">
+                            <label htmlFor="filterStatus">Filtrar por Estado:</label>
+                            <select
+                                id="filterStatus"
+                                value={filterStatus}
+                                onChange={(e) => setFilterStatus(e.target.value)}
+                            >
+                                {assignmentStatusOptions.map(option => (
+                                    <option key={option.value} value={option.value}>{option.label}</option>
+                                ))}
+                            </select>
+                            <button onClick={fetchCurrentReport}>Actualizar Reporte</button>
+                        </div>
 
-                        {reportData.length > 0 && (
-                            <button onClick={handleGenerateAndDownload}>
-                                Generar y Descargar Excel
-                            </button>
-                        )}
+                        <div className="seccion-informe">
+                            <h3>Informe de Inventario Actual</h3>
+                            {cargandoReporte && <p>Cargando reporte...</p>}
+                            {errorReporte && <p className="error-mensaje">{errorReporte}</p>}
+                            {!cargandoReporte && !errorReporte && reportData.length === 0 && (
+                                <p>No hay datos disponibles.</p>
+                            )}
+                            {!cargandoReporte && reportData.length > 0 && (
+                                <>
+                                    <div className="tabla-contenedor">
+                                        <table className="tabla-reporte">
+                                            <thead>
+                                                <tr>
+                                                    <th>ID</th>
+                                                    <th>Categoría</th>
+                                                    <th>Tipo</th>
+                                                    <th>Marca</th>
+                                                    <th>Serial</th>
+                                                    <th>RAM</th>
+                                                    <th>Disco</th>
+                                                    <th>Procesador</th>
+                                                    <th>Estado Asignación</th>
+                                                    <th>Asignado A</th>
+                                                    <th>Fecha Asignación</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {reportData.map((item) => (
+                                                    <tr key={`${item.categoria}-${item.id}`}>
+                                                        <td>{item.id}</td>
+                                                        <td>{item.categoria}</td>
+                                                        <td>{item.tipo}</td>
+                                                        <td>{item.marca}</td>
+                                                        <td>{item.serial}</td>
+                                                        <td>{item.ram || 'N/A'}</td>
+                                                        <td>{item.disco || 'N/A'}</td>
+                                                        <td>{item.procesador || 'N/A'}</td>
+                                                        <td>{item.estadoAsignacion}</td>
+                                                        <td>{item.asignadoA}</td>
+                                                        <td>{item.fechaAsignacion ? new Date(item.fechaAsignacion).toLocaleString() : 'N/A'}</td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <button onClick={handleGenerateAndDownload} className="btn-descargar">Generar y Descargar Excel</button>
+                                </>
+                            )}
+                        </div>
 
-                        <h3>Históricos</h3>
-                        <ul>
-                            {historicalReports.map(r => (
-                                <li key={r.id}>
-                                    {r.id}
-                                    <button onClick={() => handleViewHistorical(r.id)}>Ver</button>
-                                    <button onClick={() => handleDownloadHistorical(r.id)}>Excel</button>
-                                </li>
-                            ))}
-                        </ul>
+                        <div className="seccion-historico">
+                            <h3>Informes Históricos Guardados</h3>
+                            {cargandoHistorico && <p>Cargando informes históricos...</p>}
+                            {errorHistorico && <p className="error-mensaje">{errorHistorico}</p>}
+                            {!cargandoHistorico && historicalReports.length === 0 && (
+                                <p>No hay informes históricos guardados.</p>
+                            )}
+                            {!cargandoHistorico && historicalReports.length > 0 && (
+                                <ul className="lista-historicos">
+                                    {historicalReports.map(reporte => (
+                                        <li key={reporte.id}>
+                                            <p><strong>ID:</strong> {reporte.id}</p>
+                                            <p><strong>Fecha Guardado:</strong> {new Date(reporte.fechaGeneracion).toLocaleString()}</p>
+                                            <p><strong>Estado de Filtro:</strong> {reporte.estadoFiltro}</p>
+                                            <div className="acciones-historico">
+                                                <button onClick={() => handleViewHistorical(reporte.id)}>Ver Reporte</button>
+                                                <button onClick={() => handleDownloadHistorical(reporte.id, `Informe_Historico_${reporte.id}`)}>Descargar Excel</button>
+                                            </div>
+                                        </li>
+                                    ))}
+                                </ul>
+                            )}
+                        </div>
 
-                        {isHistoricalModalOpen && (
-                            <button onClick={handleCloseHistoricalModal}>Cerrar</button>
+                        {isHistoricalModalOpen && selectedHistoricalReportData && (
+                            <div className="modal">
+                                <div className="modal-content">
+                                    <h3>Detalles del Informe Histórico</h3>
+                                    <div className="tabla-modal-wrapper">
+                                        <table className="tabla-modal">
+                                            <thead>
+                                                <tr>
+                                                    <th>ID</th>
+                                                    <th>Categoría</th>
+                                                    <th>Tipo</th>
+                                                    <th>Marca</th>
+                                                    <th>Serial</th>
+                                                    <th>RAM</th>
+                                                    <th>Disco</th>
+                                                    <th>Procesador</th>
+                                                    <th>Estado Asignación</th>
+                                                    <th>Asignado A</th>
+                                                    <th>Fecha Asignación</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {selectedHistoricalReportData.map((item) => (
+                                                    <tr key={`${item.categoria}-${item.id}`}>
+                                                        <td>{item.id}</td>
+                                                        <td>{item.categoria}</td>
+                                                        <td>{item.tipo}</td>
+                                                        <td>{item.marca}</td>
+                                                        <td>{item.serial}</td>
+                                                        <td>{item.ram || 'N/A'}</td>
+                                                        <td>{item.disco || 'N/A'}</td>
+                                                        <td>{item.procesador || 'N/A'}</td>
+                                                        <td>{item.estadoAsignacion}</td>
+                                                        <td>{item.asignadoA}</td>
+                                                        <td>{item.fechaAsignacion ? new Date(item.fechaAsignacion).toLocaleString() : 'N/A'}</td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div className="modal-actions">
+                                        <button type="button" className="btn-cancelar" onClick={handleCloseHistoricalModal}>Cerrar</button>
+                                    </div>
+                                </div>
+                            </div>
                         )}
                     </>
                 )}
