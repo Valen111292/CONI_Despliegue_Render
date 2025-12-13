@@ -15,26 +15,25 @@ const InformeModulo = () => {
     const [reportData, setReportData] = useState([]);
     const [cargandoReporte, setCargandoReporte] = useState(false);
     const [errorReporte, setErrorReporte] = useState('');
-    const [filterStatus, setFilterStatus] = useState('all'); // Filtro de estado para el informe actual
+    const [filterStatus, setFilterStatus] = useState('all');
 
     // --- ESTADOS PARA INFORMES HISTÓRICOS ---
     const [historicalReports, setHistoricalReports] = useState([]);
     const [cargandoHistorico, setCargandoHistorico] = useState(false);
     const [errorHistorico, setErrorHistorico] = useState('');
-    const [selectedHistoricalReportData, setSelectedHistoricalReportData] = useState(null); // Para ver un informe histórico completo
+    const [selectedHistoricalReportData, setSelectedHistoricalReportData] = useState(null);
     const [isHistoricalModalOpen, setIsHistoricalModalOpen] = useState(false);
 
-    // Opciones de estado de asignación para el filtro (basadas en equipos_perifericos.estado)
     const assignmentStatusOptions = [
         { value: 'all', label: 'Todos los Estados' },
-        { value: 'ASIGNADO', label: 'asignado' },
+        { value: 'ASIGNADO', label: 'Asignado' },
         { value: 'DISPONIBLE', label: 'Disponible' },
-        { value: 'PENDIENTE', label: 'Pendiente' },
-        // Puedes añadir más estados si los tienes en tu DB para equipos_perifericos.estado
+        { value: 'PENDIENTE', label: 'Pendiente' }
     ];
 
-    // headers de autenticación (CLAVE PARA iOS)
-    
+    // ===============================
+    // HEADERS AUTENTICACIÓN (iOS FIX)
+    // ===============================
     const getAuthHeaders = () => {
         const storedUserJSON = localStorage.getItem("usuarioLogueado");
         const usuario = storedUserJSON ? JSON.parse(storedUserJSON) : null;
@@ -45,6 +44,7 @@ const InformeModulo = () => {
         };
     };
 
+    // ===============================
     // VALIDAR USUARIO
     // ===============================
     useEffect(() => {
@@ -61,12 +61,7 @@ const InformeModulo = () => {
             const rol = usuario.rolAutenticacion;
             const cargo = usuario.cargoEmpleado || localStorage.getItem("cargoEmpleado");
 
-            if (!id || !rol || !cargo) {
-                navigate("/");
-                return;
-            }
-
-            if (rol !== 'admin') {
+            if (!id || !rol || !cargo || rol !== 'admin') {
                 navigate("/");
                 return;
             }
@@ -103,21 +98,20 @@ const InformeModulo = () => {
             );
 
             if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.mensaje || 'Error al cargar informe');
+                throw new Error('Error al cargar informe');
             }
 
             const data = await response.json();
             setReportData(data);
         } catch (err) {
-            setErrorReporte(`No se pudo cargar el informe: ${err.message}`);
+            setErrorReporte(err.message);
         } finally {
             setCargandoReporte(false);
         }
     }, [currentUser, filterStatus]);
 
     // ===============================
-    // HISTÓRICOS (LISTA)
+    // HISTÓRICOS
     // ===============================
     const fetchHistoricalReports = useCallback(async () => {
         if (!currentUser?.id) return;
@@ -135,8 +129,7 @@ const InformeModulo = () => {
             );
 
             if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.mensaje || 'Error al cargar históricos');
+                throw new Error('Error al cargar históricos');
             }
 
             const data = await response.json();
@@ -159,71 +152,55 @@ const InformeModulo = () => {
     // GUARDAR + DESCARGAR
     // ===============================
     const handleGenerateAndDownload = async () => {
-        if (reportData.length === 0) {
-            alert("No hay datos para generar el informe.");
-            return;
-        }
+        if (reportData.length === 0) return;
 
-        try {
-            const response = await fetch(
-                'https://coni-backend.onrender.com/informes/guardar',
-                {
-                    method: 'POST',
-                    credentials: 'include',
-                    headers: getAuthHeaders(),
-                    body: JSON.stringify({
-                        estadoFiltro: filterStatus,
-                        reporteJson: JSON.stringify(reportData)
-                    })
-                }
-            );
+        await fetch('https://coni-backend.onrender.com/informes/guardar', {
+            method: 'POST',
+            credentials: 'include',
+            headers: getAuthHeaders(),
+            body: JSON.stringify({
+                estadoFiltro: filterStatus,
+                reporteJson: JSON.stringify(reportData)
+            })
+        });
 
-            const data = await response.json();
-
-            if (!response.ok) {
-                throw new Error(data.mensaje);
-            }
-
-            fetchHistoricalReports();
-        } catch (err) {
-            alert(`Error al guardar informe: ${err.message}`);
-        }
-
-        exportToExcel(
-            reportData,
-            `Informe_Inventario_${filterStatus}_${new Date().toISOString().slice(0, 10)}`
-        );
+        fetchHistoricalReports();
+        exportToExcel(reportData, `Informe_Inventario_${filterStatus}`);
     };
 
     // ===============================
-    // HISTÓRICO ESPECÍFICO
+    // HISTÓRICO DETALLE
     // ===============================
     const fetchHistoricalDetail = async (id, download = false) => {
-        try {
-            const response = await fetch(
-                `https://coni-backend.onrender.com/informes/historico?id=${id}`,
-                {
-                    credentials: 'include',
-                    headers: getAuthHeaders()
-                }
-            );
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.mensaje);
+        const response = await fetch(
+            `https://coni-backend.onrender.com/informes/historico?id=${id}`,
+            {
+                credentials: 'include',
+                headers: getAuthHeaders()
             }
+        );
 
-            const data = await response.json();
+        const data = await response.json();
 
-            if (download) {
-                exportToExcel(data, `Informe_Historico_${id}`);
-            } else {
-                setSelectedHistoricalReportData(data);
-                setIsHistoricalModalOpen(true);
-            }
-        } catch (err) {
-            alert(err.message);
+        if (download) {
+            exportToExcel(data, `Informe_Historico_${id}`);
+        } else {
+            setSelectedHistoricalReportData(data);
+            setIsHistoricalModalOpen(true);
         }
+    };
+
+    const handleViewHistorical = (id) => {
+        fetchHistoricalDetail(id, false);
+    };
+
+    const handleDownloadHistorical = (id) => {
+        fetchHistoricalDetail(id, true);
+    };
+
+    const handleCloseHistoricalModal = () => {
+        setIsHistoricalModalOpen(false);
+        setSelectedHistoricalReportData(null);
     };
 
     // ===============================
@@ -249,226 +226,47 @@ const InformeModulo = () => {
         localStorage.clear();
         sessionStorage.clear();
         navigate("/");
-    }
+    };
+
+    return (
+        <div className="informe-modulo">
+            <header className="encabezado">
+                <img src={logo} className="imagen-encabezado" alt="Logo CONI" />
+                <button onClick={handleLogout}>Cerrar sesión</button>
+            </header>
+
+            <main>
+                <h2>Generar Informes</h2>
+
+                {cargandoUsuario ? <p>Cargando usuario...</p> : (
+                    <>
+                        <button onClick={fetchCurrentReport}>Actualizar</button>
+
+                        {reportData.length > 0 && (
+                            <button onClick={handleGenerateAndDownload}>
+                                Generar y Descargar Excel
+                            </button>
+                        )}
+
+                        <h3>Históricos</h3>
+                        <ul>
+                            {historicalReports.map(r => (
+                                <li key={r.id}>
+                                    {r.id}
+                                    <button onClick={() => handleViewHistorical(r.id)}>Ver</button>
+                                    <button onClick={() => handleDownloadHistorical(r.id)}>Excel</button>
+                                </li>
+                            ))}
+                        </ul>
+
+                        {isHistoricalModalOpen && (
+                            <button onClick={handleCloseHistoricalModal}>Cerrar</button>
+                        )}
+                    </>
+                )}
+            </main>
+        </div>
+    );
 };
-
-  return (
-  <div className="informe-modulo">
-    <header className="encabezado">
-      <img src={logo} className="imagen-encabezado" alt="Logo CONI" />
-      <div className="barra-superior">
-        <nav>
-          <ul>
-            <li>
-              <button onClick={handleLogout}>Cerrar sesión</button>
-            </li>
-          </ul>
-        </nav>
-      </div>
-    </header>
-
-    <main>
-      <h2>Generar Informes</h2>
-
-      {cargandoUsuario ? (
-        <p>Cargando información del usuario...</p>
-      ) : (
-        <>
-          <div className="filtros-container">
-            <label htmlFor="filterStatus">Filtrar por Estado:</label>
-            <select
-              id="filterStatus"
-              value={filterStatus}
-              onChange={(e) => setFilterStatus(e.target.value)}
-            >
-              {assignmentStatusOptions.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-            <button onClick={fetchCurrentReport}>Actualizar Reporte</button>
-          </div>
-
-          <div className="seccion-informe">
-            <h3>Informe de Inventario Actual</h3>
-
-            {cargandoReporte && <p>Cargando reporte...</p>}
-            {errorReporte && <p className="error-mensaje">{errorReporte}</p>}
-
-            {!cargandoReporte && !errorReporte && reportData.length === 0 && (
-              <p>
-                No hay datos disponibles para el informe actual con los filtros
-                seleccionados.
-              </p>
-            )}
-
-            {!cargandoReporte && reportData.length > 0 && (
-              <>
-                <table className="tabla-reporte">
-                  <thead>
-                    <tr>
-                      <th>ID</th>
-                      <th>Categoría</th>
-                      <th>Tipo</th>
-                      <th>Marca</th>
-                      <th>Serial</th>
-                      <th>RAM</th>
-                      <th>Disco</th>
-                      <th>Procesador</th>
-                      <th>Estado Asignación</th>
-                      <th>Asignado A</th>
-                      <th>Fecha Asignación</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {reportData.map((item) => (
-                      <tr key={`${item.categoria}-${item.id}`}>
-                        <td>{item.id}</td>
-                        <td>{item.categoria}</td>
-                        <td>{item.tipo}</td>
-                        <td>{item.marca}</td>
-                        <td>{item.serial}</td>
-                        <td>{item.ram || "N/A"}</td>
-                        <td>{item.disco || "N/A"}</td>
-                        <td>{item.procesador || "N/A"}</td>
-                        <td>{item.estadoAsignacion}</td>
-                        <td>{item.asignadoA}</td>
-                        <td>
-                          {item.fechaAsignacion
-                            ? new Date(item.fechaAsignacion).toLocaleString()
-                            : "N/A"}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-
-                <button
-                  onClick={handleGenerateAndDownload}
-                  className="btn-descargar"
-                >
-                  Generar y Descargar Excel
-                </button>
-              </>
-            )}
-          </div>
-
-          <div className="seccion-historico">
-            <h3>Informes Históricos Guardados</h3>
-
-            {cargandoHistorico && <p>Cargando informes históricos...</p>}
-            {errorHistorico && (
-              <p className="error-mensaje">{errorHistorico}</p>
-            )}
-
-            {!cargandoHistorico && historicalReports.length === 0 && (
-              <p>No hay informes históricos guardados.</p>
-            )}
-
-            {!cargandoHistorico && historicalReports.length > 0 && (
-              <ul className="lista-historicos">
-                {historicalReports.map((reporte) => (
-                  <li key={reporte.id}>
-                    <p>
-                      <strong>ID:</strong> {reporte.id}
-                    </p>
-                    <p>
-                      <strong>Fecha Guardado:</strong>{" "}
-                      {new Date(reporte.fechaGeneracion).toLocaleString()}
-                    </p>
-                    <p>
-                      <strong>Estado de Filtro:</strong>{" "}
-                      {reporte.estadoFiltro}
-                    </p>
-
-                    <div className="acciones-historico">
-                      <button
-                        onClick={() => handleViewHistorical(reporte.id)}
-                      >
-                        Ver Reporte
-                      </button>
-                      <button
-                        onClick={() =>
-                          handleDownloadHistorical(
-                            reporte.id,
-                            `Informe_Historico_${reporte.id}`
-                          )
-                        }
-                      >
-                        Descargar Excel
-                      </button>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-
-          {isHistoricalModalOpen && selectedHistoricalReportData && (
-            <div className="modal">
-              <div className="modal-content">
-                <h3>Detalles del Informe Histórico</h3>
-
-                <div className="tabla-modal-wrapper">
-                  <table className="tabla-modal">
-                    <thead>
-                      <tr>
-                        <th>ID</th>
-                        <th>Categoría</th>
-                        <th>Tipo</th>
-                        <th>Marca</th>
-                        <th>Serial</th>
-                        <th>RAM</th>
-                        <th>Disco</th>
-                        <th>Procesador</th>
-                        <th>Estado Asignación</th>
-                        <th>Asignado A</th>
-                        <th>Fecha Asignación</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {selectedHistoricalReportData.map((item) => (
-                        <tr key={`${item.categoria}-${item.id}`}>
-                          <td>{item.id}</td>
-                          <td>{item.categoria}</td>
-                          <td>{item.tipo}</td>
-                          <td>{item.marca}</td>
-                          <td>{item.serial}</td>
-                          <td>{item.ram || "N/A"}</td>
-                          <td>{item.disco || "N/A"}</td>
-                          <td>{item.procesador || "N/A"}</td>
-                          <td>{item.estadoAsignacion}</td>
-                          <td>{item.asignadoA}</td>
-                          <td>
-                            {item.fechaAsignacion
-                              ? new Date(
-                                  item.fechaAsignacion
-                                ).toLocaleString()
-                              : "N/A"}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-
-                <div className="modal-actions">
-                  <button
-                    type="button"
-                    className="btn-cancelar"
-                    onClick={handleCloseHistoricalModal}
-                  >
-                    Cerrar
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
-        </>
-      )}
-    </main>
-  </div>
-);
 
 export default InformeModulo;
