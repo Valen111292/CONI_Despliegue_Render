@@ -205,7 +205,8 @@ const EmpleadoForm = () => {
                 <img src={logo} className="imagen-encabezado" alt="Logo CONI" />
                 <div className="barra-superior">
                     <nav>
-                      <li><button onClick={handleLogout}>Cerrar sesión</button></li>
+                        <li><button onClick={() => navigate("/perfilUsuario")}>Volver perfil usuario</button></li>
+                        <li><button onClick={handleLogout}>Cerrar sesión</button></li>
                     </nav>
                 </div>
             </div>
@@ -216,8 +217,8 @@ const EmpleadoForm = () => {
                 <div className='listado-container'>
                     <h2>Listado de Empleados</h2>
                     <div className='filtros'>
-                        
-                            <button onClick={() => setVista("crear")}>Registrar Nuevo Empleado</button>
+
+                        <button onClick={() => setVista("crear")}>Registrar Nuevo Empleado</button>
 
                         <input
                             type="text"

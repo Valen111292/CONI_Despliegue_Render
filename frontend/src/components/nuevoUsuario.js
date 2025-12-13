@@ -137,7 +137,7 @@ const NuevoUsuario = () => {
         <div className="barra-superior">
           <nav>
             <ul>
-              <li><a href="/gestionUsuario">Gestion de usuarios</a></li>
+              <li><a href="/gestionUsuario">Gestión de usuarios</a></li>
               <li><button onClick={handleLogout}>Cerrar sesión</button></li>
             </ul>
           </nav>

@@ -106,7 +106,7 @@ function ModificarUsuario() {
         <div className="barra-superior">
           <nav>
             <ul>
-              <li><a href="gestionUsuario">Gestionar usuario</a></li>
+              <li><a href="gestionUsuario">Gestión usuario</a></li>
               <li><button onClick={handleLogout}>Cerrar sesión</button></li>
             </ul>
           </nav>

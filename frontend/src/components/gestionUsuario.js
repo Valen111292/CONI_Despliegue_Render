@@ -54,6 +54,7 @@ const GestionarUsuario = () => {
                 <div className="barra-superior">
                     <nav>
                         <ul>
+                            <li><button onClick={() => navigate("/perfilAdmin")}>Volver perfil Administrador</button></li>
                             <li><button onClick={handleLogout}>Cerrar sesión</button></li>
                         </ul>
                     </nav>
