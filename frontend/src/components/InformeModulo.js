@@ -32,6 +32,18 @@ const InformeModulo = () => {
         { value: 'PENDIENTE', label: 'Pendiente' },
     ];
 
+    // Se agrego esta función para obtener los headers de autenticación y solucionar error 401
+    const getAuthHeaders = () => {
+        const storedUserJSON = localStorage.getItem("usuarioLogueado");
+        const usuario = storedUserJSON ? JSON.parse(storedUserJSON) : null;
+
+        return {
+            'Content-Type': 'application/json',
+            'X-User-Id': usuario?.idUsuario || usuario?.id || ''
+        };
+    };
+
+
     // --- EFECTO PARA OBTENER Y VERIFICAR EL USUARIO AUTENTICADO ---
     useEffect(() => {
         const storedUserJSON = localStorage.getItem("usuarioLogueado");
@@ -78,7 +90,10 @@ const InformeModulo = () => {
             }
 
             const url = `https://coni-backend.onrender.com/informes/inventario?${queryParams.toString()}`;
-            const response = await fetch(url, { credentials: 'include' });
+            const response = await fetch(url, {
+                credentials: 'include',
+                headers: getAuthHeaders()
+            });
 
             if (!response.ok) {
                 const errorData = await response.json();
@@ -104,7 +119,11 @@ const InformeModulo = () => {
 
         try {
             const url = `https://coni-backend.onrender.com/informes/historico`;
-            const response = await fetch(url, { credentials: 'include' });
+            const response = await fetch(url, {
+                credentials: 'include',
+                headers: getAuthHeaders()
+            });
+
 
             if (!response.ok) {
                 const errorData = await response.json();
@@ -144,9 +163,10 @@ const InformeModulo = () => {
 
             const response = await fetch('https://coni-backend.onrender.com/informes/guardar', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: getAuthHeaders(),
                 body: JSON.stringify(reportToSave),
                 credentials: 'include'
+
             });
 
             const data = await response.json();
@@ -173,7 +193,11 @@ const InformeModulo = () => {
         }
         try {
             const url = `https://coni-backend.onrender.com/informes/historico?id=${reportId}`;
-            const response = await fetch(url, { credentials: 'include' });
+            const response = await fetch(url, {
+                credentials: 'include',
+                headers: getAuthHeaders()
+            });
+
 
             if (!response.ok) {
                 const errorData = await response.json();
@@ -204,7 +228,11 @@ const InformeModulo = () => {
         }
         try {
             const url = `https://coni-backend.onrender.com/informes/historico?id=${reportId}`;
-            const response = await fetch(url, { credentials: 'include' });
+            const response = await fetch(url, {
+                credentials: 'include',
+                headers: getAuthHeaders()
+            });
+
 
             if (!response.ok) {
                 const errorData = await response.json();
