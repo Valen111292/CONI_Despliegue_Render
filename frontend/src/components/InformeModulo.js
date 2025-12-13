@@ -251,65 +251,223 @@ const InformeModulo = () => {
         navigate("/");
     };
 
-    // ===============================
-    // RENDER
-    // ===============================
-    return (
-        <div className="informe-modulo">
-            <header className="encabezado">
-                <img src={logo} alt="CONI" />
-                <button onClick={handleLogout}>Cerrar sesión</button>
-            </header>
+  return (
+  <div className="informe-modulo">
+    <header className="encabezado">
+      <img src={logo} className="imagen-encabezado" alt="Logo CONI" />
+      <div className="barra-superior">
+        <nav>
+          <ul>
+            <li>
+              <button onClick={handleLogout}>Cerrar sesión</button>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </header>
 
-            <main>
-                <h2>Generar Informes</h2>
+    <main>
+      <h2>Generar Informes</h2>
 
-                {cargandoUsuario ? <p>Cargando usuario...</p> : (
-                    <>
-                        <select value={filterStatus} onChange={e => setFilterStatus(e.target.value)}>
-                            {assignmentStatusOptions.map(o => (
-                                <option key={o.value} value={o.value}>{o.label}</option>
-                            ))}
-                        </select>
+      {cargandoUsuario ? (
+        <p>Cargando información del usuario...</p>
+      ) : (
+        <>
+          <div className="filtros-container">
+            <label htmlFor="filterStatus">Filtrar por Estado:</label>
+            <select
+              id="filterStatus"
+              value={filterStatus}
+              onChange={(e) => setFilterStatus(e.target.value)}
+            >
+              {assignmentStatusOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+            <button onClick={fetchCurrentReport}>Actualizar Reporte</button>
+          </div>
 
-                        <button onClick={fetchCurrentReport}>Actualizar</button>
+          <div className="seccion-informe">
+            <h3>Informe de Inventario Actual</h3>
 
-                        {errorReporte && <p className="error-mensaje">{errorReporte}</p>}
+            {cargandoReporte && <p>Cargando reporte...</p>}
+            {errorReporte && <p className="error-mensaje">{errorReporte}</p>}
 
-                        {reportData.length > 0 && (
-                            <>
-                                <table>
-                                    <tbody>
-                                        {reportData.map(i => (
-                                            <tr key={i.id}>
-                                                <td>{i.id}</td>
-                                                <td>{i.categoria}</td>
-                                                <td>{i.marca}</td>
-                                                <td>{i.estadoAsignacion}</td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
+            {!cargandoReporte && !errorReporte && reportData.length === 0 && (
+              <p>
+                No hay datos disponibles para el informe actual con los filtros
+                seleccionados.
+              </p>
+            )}
 
-                                <button onClick={handleGenerateAndDownload}>
-                                    Generar y Descargar Excel
-                                </button>
-                            </>
-                        )}
+            {!cargandoReporte && reportData.length > 0 && (
+              <>
+                <table className="tabla-reporte">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Categoría</th>
+                      <th>Tipo</th>
+                      <th>Marca</th>
+                      <th>Serial</th>
+                      <th>RAM</th>
+                      <th>Disco</th>
+                      <th>Procesador</th>
+                      <th>Estado Asignación</th>
+                      <th>Asignado A</th>
+                      <th>Fecha Asignación</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {reportData.map((item) => (
+                      <tr key={`${item.categoria}-${item.id}`}>
+                        <td>{item.id}</td>
+                        <td>{item.categoria}</td>
+                        <td>{item.tipo}</td>
+                        <td>{item.marca}</td>
+                        <td>{item.serial}</td>
+                        <td>{item.ram || "N/A"}</td>
+                        <td>{item.disco || "N/A"}</td>
+                        <td>{item.procesador || "N/A"}</td>
+                        <td>{item.estadoAsignacion}</td>
+                        <td>{item.asignadoA}</td>
+                        <td>
+                          {item.fechaAsignacion
+                            ? new Date(item.fechaAsignacion).toLocaleString()
+                            : "N/A"}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
 
-                        <h3>Informes Históricos</h3>
-                        {historicalReports.map(r => (
-                            <div key={r.id}>
-                                <span>{new Date(r.fechaGeneracion).toLocaleString()}</span>
-                                <button onClick={() => fetchHistoricalDetail(r.id)}>Ver</button>
-                                <button onClick={() => fetchHistoricalDetail(r.id, true)}>Excel</button>
-                            </div>
-                        ))}
-                    </>
-                )}
-            </main>
-        </div>
-    );
-};
+                <button
+                  onClick={handleGenerateAndDownload}
+                  className="btn-descargar"
+                >
+                  Generar y Descargar Excel
+                </button>
+              </>
+            )}
+          </div>
+
+          <div className="seccion-historico">
+            <h3>Informes Históricos Guardados</h3>
+
+            {cargandoHistorico && <p>Cargando informes históricos...</p>}
+            {errorHistorico && (
+              <p className="error-mensaje">{errorHistorico}</p>
+            )}
+
+            {!cargandoHistorico && historicalReports.length === 0 && (
+              <p>No hay informes históricos guardados.</p>
+            )}
+
+            {!cargandoHistorico && historicalReports.length > 0 && (
+              <ul className="lista-historicos">
+                {historicalReports.map((reporte) => (
+                  <li key={reporte.id}>
+                    <p>
+                      <strong>ID:</strong> {reporte.id}
+                    </p>
+                    <p>
+                      <strong>Fecha Guardado:</strong>{" "}
+                      {new Date(reporte.fechaGeneracion).toLocaleString()}
+                    </p>
+                    <p>
+                      <strong>Estado de Filtro:</strong>{" "}
+                      {reporte.estadoFiltro}
+                    </p>
+
+                    <div className="acciones-historico">
+                      <button
+                        onClick={() => handleViewHistorical(reporte.id)}
+                      >
+                        Ver Reporte
+                      </button>
+                      <button
+                        onClick={() =>
+                          handleDownloadHistorical(
+                            reporte.id,
+                            `Informe_Historico_${reporte.id}`
+                          )
+                        }
+                      >
+                        Descargar Excel
+                      </button>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+
+          {isHistoricalModalOpen && selectedHistoricalReportData && (
+            <div className="modal">
+              <div className="modal-content">
+                <h3>Detalles del Informe Histórico</h3>
+
+                <div className="tabla-modal-wrapper">
+                  <table className="tabla-modal">
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>Categoría</th>
+                        <th>Tipo</th>
+                        <th>Marca</th>
+                        <th>Serial</th>
+                        <th>RAM</th>
+                        <th>Disco</th>
+                        <th>Procesador</th>
+                        <th>Estado Asignación</th>
+                        <th>Asignado A</th>
+                        <th>Fecha Asignación</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {selectedHistoricalReportData.map((item) => (
+                        <tr key={`${item.categoria}-${item.id}`}>
+                          <td>{item.id}</td>
+                          <td>{item.categoria}</td>
+                          <td>{item.tipo}</td>
+                          <td>{item.marca}</td>
+                          <td>{item.serial}</td>
+                          <td>{item.ram || "N/A"}</td>
+                          <td>{item.disco || "N/A"}</td>
+                          <td>{item.procesador || "N/A"}</td>
+                          <td>{item.estadoAsignacion}</td>
+                          <td>{item.asignadoA}</td>
+                          <td>
+                            {item.fechaAsignacion
+                              ? new Date(
+                                  item.fechaAsignacion
+                                ).toLocaleString()
+                              : "N/A"}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+
+                <div className="modal-actions">
+                  <button
+                    type="button"
+                    className="btn-cancelar"
+                    onClick={handleCloseHistoricalModal}
+                  >
+                    Cerrar
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+        </>
+      )}
+    </main>
+  </div>
+);
 
 export default InformeModulo;
