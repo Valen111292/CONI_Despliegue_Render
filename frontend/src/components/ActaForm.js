@@ -93,7 +93,7 @@ function ActaForm() {
         );
     };
 
-    // Lógica de handleSubmit basada en tu código original, con adiciones para refresco y limpieza
+    // Lógica de handleSubmit 
     const handleSubmit = (e) => {
         e.preventDefault();
 
@@ -105,9 +105,11 @@ function ActaForm() {
         }
 
         const datos = {
-            ...formulario,
+            nombre_completo: actaDAta.nombre_completo,
+            cedula: actaDAta.cedula,
             n_inventario: seleccionados
         };
+
 
         fetch('https://coni-backend.onrender.com/ActasServlet', {
             method: 'POST',
