@@ -17,8 +17,8 @@ public class CORSFilter implements Filter {
         String origin = req.getHeader("Origin");
 
         // Lista blanca de orígenes permitidos
-        if ("http://localhost:3001".equals(origin) ||
-            "https://coni-frontend.onrender.com".equals(origin)) {
+        if ("http://localhost:3001".equals(origin)
+                || "https://coni-frontend.onrender.com".equals(origin)) {
             res.setHeader("Access-Control-Allow-Origin", origin);
         }
 
@@ -28,7 +28,7 @@ public class CORSFilter implements Filter {
         res.setHeader("Access-Control-Allow-Credentials", "true");
         res.setHeader("Access-Control-Max-Age", "3600");
         res.setHeader("Access-Control-Expose-Headers", "Set-Cookie");
-
+        res.setHeader("Access-Control-Allow-Headers", "Content-Type, X-User-Id");
 
         // Preflight
         if ("OPTIONS".equalsIgnoreCase(req.getMethod())) {

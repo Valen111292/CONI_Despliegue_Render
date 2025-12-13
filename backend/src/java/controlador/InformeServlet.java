@@ -22,12 +22,22 @@ import Conexion.Conexion; // Asegúrate de que esta clase de conexión sea corre
 @WebServlet("/informes/*") // Usamos /* para manejar sub-rutas como /inventario, /guardar, /historico
 public class InformeServlet extends HttpServlet {
 
-    // Método auxiliar para obtener el ID de usuario de la sesión
     private Integer getUserIdFromSession(HttpServletRequest request) {
-        HttpSession session = request.getSession(false); 
-        if (session != null) {
+        // 1. Intentar por sesión (Chrome / Android)
+        HttpSession session = request.getSession(false);
+        if (session != null && session.getAttribute("idUsuario") != null) {
             return (Integer) session.getAttribute("idUsuario");
         }
+
+        // 2.  (Safari iOS)
+        String userIdHeader = request.getHeader("X-User-Id");
+        if (userIdHeader != null) {
+            try {
+                return Integer.parseInt(userIdHeader);
+            } catch (NumberFormatException ignored) {
+            }
+        }
+
         return null;
     }
 
