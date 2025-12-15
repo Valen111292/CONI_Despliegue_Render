@@ -5,6 +5,10 @@
         <group>
             <file>file:/C:/Users/Lenovo/OneDrive/Documentos/SENA/CONI_FUNCIONES%2010%20NOV/backend/src/java/controlador/InformeServlet.java</file>
             <file>file:/C:/Users/Lenovo/OneDrive/Documentos/SENA/CONI_FUNCIONES%2010%20NOV/backend/src/java/filtro/CORSFilter.java</file>
+            <file>file:/C:/Users/Lenovo/OneDrive/Documentos/SENA/CONI_FUNCIONES%2010%20NOV/backend/src/java/controlador/DescargarPDFServlet.java</file>
+            <file>file:/C:/Users/Lenovo/OneDrive/Documentos/SENA/CONI_FUNCIONES%2010%20NOV/backend/src/java/controlador/ActasServlet.java</file>
+            <file>file:/C:/Users/Lenovo/OneDrive/Documentos/SENA/CONI_FUNCIONES%2010%20NOV/backend/src/java/controlador/EmpleadoServlet.java</file>
+            <file>file:/C:/Users/Lenovo/OneDrive/Documentos/SENA/CONI_FUNCIONES%2010%20NOV/backend/src/java/Conexion/Conexion.java</file>
         </group>
     </open-files>
 </project-private>
